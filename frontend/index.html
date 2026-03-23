@@ -6,67 +6,359 @@
   <title>Launchpad — Land your first internship</title>
   <link rel="stylesheet" href="/static/style.css" />
   <style>
-    /* Globe hero */
-    .hero-globe-wrap {
-      position: relative;
-      min-height: 100vh;
+    /* ═══════════════════════════════════════════════════
+       GEMINI HERO — auto-plays on load, 100vh
+    ═══════════════════════════════════════════════════ */
+    #gemini-section {
+      height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      padding: 8rem 1.5rem 5rem;
+      position: relative;
+      padding: 0 1.5rem;
     }
-    #globe-canvas {
+
+    .hero-eyebrow {
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 2.25rem;
+      position: relative;
+      z-index: 4;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    #gemini-svg-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 1560px;
+      padding: 0 148px; /* room for side labels */
+    }
+    #gemini-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      overflow: visible;
+    }
+    #gemini-svg path {
+      fill: none;
+      stroke-linecap: round;
+    }
+
+    /* Floating labels */
+    .gemini-label-wrap {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0;
+      transition: opacity 0.1s linear;
+      width: 130px;
+    }
+    #label-left  { left: -4px; text-align: left; }
+    #label-right { right: -4px; text-align: right; }
+
+    #label-center {
+      text-align: center;
+      opacity: 0;
+      margin-bottom: -7.5rem;
+      position: relative;
+      z-index: 4;
+    }
+
+    .gemini-label-title {
+      display: block;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 0.3rem;
+    }
+    .gemini-label-sub {
+      display: block;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.28);
+      line-height: 1.5;
+    }
+    .gemini-center-logo {
+      font-family: 'Cormorant', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 600;
+      font-style: italic;
+      color: var(--white);
+      line-height: 1;
+    }
+    .gemini-center-sub {
+      font-size: 0.68rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      margin-top: 0.35rem;
+    }
+
+    /* Hero text that fades in last */
+    #hero-text {
+      text-align: center;
+      max-width: 600px;
+      padding: 0 1rem;
+      margin-top: 3.25rem;
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.1s linear, transform 0.1s linear;
+      position: relative;
+      z-index: 4;
+    }
+    #hero-text h1 {
+      font-family: 'Cormorant', serif;
+      font-size: clamp(2.6rem, 5vw, 4.4rem);
+      font-weight: 600;
+      line-height: 1.06;
+      letter-spacing: -0.01em;
+      margin-bottom: 1rem;
+    }
+    #hero-text h1 em { font-style: italic; }
+    #hero-text p {
+      font-size: 0.975rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 440px;
+      margin: 0 auto 1.75rem;
+    }
+    .hero-cta-row {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       STATS BAND
+    ═══════════════════════════════════════════════════ */
+    .stats-band {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 3.5rem 1.5rem;
+    }
+    .stats-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      gap: clamp(2rem, 6vw, 5rem);
+      flex-wrap: wrap;
+    }
+    .stat-item { text-align: center; }
+    .stat-n {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1.65rem;
+      font-weight: 300;
+      color: var(--white);
+      display: block;
+      letter-spacing: 0.02em;
+    }
+    .stat-l {
+      font-size: 0.73rem;
+      color: var(--muted);
+      letter-spacing: 0.03em;
+      display: block;
+      margin-top: 0.25rem;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       JOURNEY SECTION — Three.js scroll scene
+    ═══════════════════════════════════════════════════ */
+    #journey-section {
+      height: 300vh;
+      position: relative;
+    }
+    #journey-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+    }
+    #journey-canvas {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
-      pointer-events: none;
-      z-index: 0;
     }
-    /* Radial fade so globe blends into page */
-    .hero-globe-wrap::after {
+
+    /* Left-edge fade so text reads cleanly */
+    #journey-sticky::before {
       content: '';
       position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse 70% 60% at 50% 50%, transparent 30%, #060606 80%);
+      left: 0; top: 0; bottom: 0;
+      width: 520px;
+      background: linear-gradient(to right, rgba(6,6,6,0.82) 55%, transparent);
+      z-index: 2;
       pointer-events: none;
-      z-index: 1;
     }
-    /* Bottom edge fade into next section */
-    .hero-globe-wrap::before {
+    /* Bottom fade */
+    #journey-sticky::after {
       content: '';
       position: absolute;
       bottom: 0; left: 0; right: 0;
-      height: 200px;
+      height: 120px;
       background: linear-gradient(to bottom, transparent, #060606);
-      pointer-events: none;
       z-index: 2;
+      pointer-events: none;
     }
-    .hero-content {
-      position: relative;
-      z-index: 3;
-      text-align: center;
-      max-width: 720px;
-    }
-    .hero-eyebrow {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      font-size: 0.75rem; font-weight: 500; color: var(--muted);
-      letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2rem;
-    }
-    .hero-eyebrow::before, .hero-eyebrow::after {
-      content: ''; display: inline-block; width: 28px; height: 1px;
-      background: rgba(255,255,255,0.3);
-    }
-    .hero h1 { font-family: 'Cormorant', serif; font-size: clamp(3.2rem, 6.5vw, 5.8rem); font-weight: 600; line-height: 1.05; letter-spacing: -0.01em; padding-bottom: 0.15em; overflow: visible; }
-    .hero h1 em { font-style: italic; color: var(--white); }
-    .hero-stats { display: flex; justify-content: center; gap: 3rem; margin-top: 3.5rem; padding-top: 3.5rem; border-top: 1px solid var(--border); }
-    .hero-stats div { text-align: center; }
-    .hero-stats .n { font-family: 'DM Sans', sans-serif; font-size: 1.6rem; font-weight: 300; color: var(--white); display: block; letter-spacing: 0.02em; }
-    .hero-stats .l { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.04em; }
 
-    /* Step-through animation on Start Exploring */
+    /* Section label strip at top */
+    .journey-header {
+      position: absolute;
+      top: 2.5rem;
+      left: 5%;
+      z-index: 6;
+    }
+    .journey-header-tag {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    /* Text overlay — left panel */
+    #journey-overlay {
+      position: absolute;
+      left: 5%;
+      top: 50%;
+      transform: translateY(-50%);
+      width: min(380px, 90vw);
+      z-index: 5;
+      pointer-events: none;
+    }
+    .journey-stage {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      opacity: 0;
+      will-change: opacity, transform;
+    }
+    .stage-eyebrow {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .journey-stage h2 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: clamp(1.5rem, 2.5vw, 2rem);
+      font-weight: 600;
+      line-height: 1.2;
+      color: var(--white);
+      margin-bottom: 1rem;
+      overflow: visible;
+      padding-bottom: 0.2em;
+    }
+    .journey-stage p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+    }
+    .journey-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+    .journey-list li {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.45);
+      display: flex;
+      gap: 0.6rem;
+      align-items: flex-start;
+    }
+    .journey-list li::before {
+      content: '—';
+      color: rgba(255,255,255,0.2);
+      flex-shrink: 0;
+    }
+
+    /* Right-side stage nav dots */
+    #journey-nav {
+      position: absolute;
+      right: 3.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+      z-index: 6;
+    }
+    .jp-dot {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      cursor: default;
+    }
+    .jp-dot::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      transition: background 0.35s, transform 0.35s;
+      flex-shrink: 0;
+    }
+    .jp-dot.active::before {
+      background: var(--white);
+      transform: scale(1.6);
+    }
+    .jp-dot span {
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.35s;
+    }
+    .jp-dot.active span { color: rgba(255,255,255,0.75); }
+
+    /* Scroll hint at bottom */
+    .journey-scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      z-index: 6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 36px;
+      background: linear-gradient(to bottom, var(--muted), transparent);
+      animation: scrollDrop 1.6s ease-in-out infinite;
+    }
+    @keyframes scrollDrop {
+      0%   { transform: scaleY(0); transform-origin: top; }
+      50%  { transform: scaleY(1); transform-origin: top; }
+      51%  { transform: scaleY(1); transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+
+    /* ═══════════════════════════════════════════════════
+       FEATURE ROWS
+    ═══════════════════════════════════════════════════ */
     @keyframes stepPulse {
       0%   { box-shadow: 0 0 0 0 rgba(255,255,255,0.18); }
       60%  { box-shadow: 0 0 0 10px rgba(255,255,255,0); }
@@ -76,28 +368,32 @@
       outline: 1px solid rgba(255,255,255,0.35);
       animation: stepPulse 0.8s ease forwards;
     }
-
-    /* Alternating feature sections */
-    .feat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; padding: 5rem 0; border-top: 1px solid var(--border); }
+    .feat-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+      padding: 5rem 0;
+      border-top: 1px solid var(--border);
+    }
     .feat-row:last-child { border-bottom: 1px solid var(--border); }
     .feat-tag { font-size: 0.7rem; font-weight: 600; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1rem; }
     .feat-row h2 { font-size: 1.75rem; margin-bottom: 1rem; overflow: visible; padding-bottom: 0.3em; line-height: 1.25; }
     .feat-list { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; margin-top: 1.5rem; }
     .feat-list li { display: flex; gap: 0.75rem; align-items: flex-start; font-size: 0.875rem; color: var(--muted); }
     .feat-list li::before { content: '—'; color: var(--border-strong); flex-shrink: 0; }
-
-    /* Preview mock cards */
     .preview { background: var(--navy-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; }
     .preview-label { font-size: 0.65rem; font-weight: 600; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.25rem; }
     .preview-row { display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 0.85rem; border-radius: 4px; background: var(--navy-light); border: 1px solid var(--border); margin-bottom: 0.5rem; }
-
-    /* CTA strip */
     .cta-strip { text-align: center; padding: 6rem 1.5rem; }
     .cta-strip h2 { font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -0.03em; margin-bottom: 1rem; }
 
     @media (max-width: 768px) {
       .feat-row { grid-template-columns: 1fr; gap: 2.5rem; }
-      .hero-stats { gap: 1.5rem; }
+      #label-left, #label-right { display: none; }
+      #journey-nav { display: none; }
+      #journey-sticky::before { width: 100%; background: linear-gradient(to bottom, rgba(6,6,6,0.7) 0%, transparent 50%, rgba(6,6,6,0.7) 100%); }
+      #journey-overlay { left: 1.5rem; right: 1.5rem; width: auto; }
     }
   </style>
 </head>
@@ -112,62 +408,208 @@
 </nav>
 <script>
   if (localStorage.getItem('userId')) {
-    document.getElementById('login-btn').href = '/dashboard.html';
+    document.getElementById('login-btn').href        = '/dashboard.html';
+    document.getElementById('login-btn').textContent = 'Dashboard';
   }
 </script>
 
-<!-- Hero -->
-<section class="hero hero-globe-wrap">
-  <canvas id="globe-canvas"></canvas>
-  <div class="hero-content">
-    <div class="hero-eyebrow">For university students targeting their first internship</div>
+<!-- ═══════════════════════════════════════
+     GEMINI HERO — auto-plays on page load
+════════════════════════════════════════ -->
+<section id="gemini-section">
+
+  <div class="hero-eyebrow">For university students targeting their first internship</div>
+
+  <!-- Launchpad title above the graphic -->
+  <div id="label-center">
+    <div class="gemini-center-logo">Launchpad</div>
+  </div>
+
+  <div id="gemini-svg-wrap">
+    <!-- Side labels -->
+    <div class="gemini-label-wrap" id="label-left">
+      <span class="gemini-label-title">University Student</span>
+      <span class="gemini-label-sub">Any degree · Any year</span>
+    </div>
+    <div class="gemini-label-wrap" id="label-right">
+      <span class="gemini-label-title">Intern &amp; Professional</span>
+      <span class="gemini-label-sub">Any industry<br>Any role</span>
+    </div>
+
+    <!-- 13 paths — gold top-left→bottom-right, blue bottom-left→top-right
+         Coil starts x=560, peaks at x=660 and x=800, exits at x=840
+         Entry CP (approachCP2) calculated so tangent is CONTINUOUS at coil join:
+           approachCP2y = 2*yEntry - yP1  →  incoming slope == outgoing slope -->
+    <svg id="gemini-svg" viewBox="0 0 1400 360" preserveAspectRatio="xMidYMid meet" overflow="visible">
+      <defs>
+        <filter id="neon-glow" x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="b1"/>
+          <feGaussianBlur in="SourceGraphic" stdDeviation="5"   result="b2"/>
+          <feGaussianBlur in="SourceGraphic" stdDeviation="11"  result="b3"/>
+          <feMerge>
+            <feMergeNode in="b3"/>
+            <feMergeNode in="b2"/>
+            <feMergeNode in="b1"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+      </defs>
+
+      <!-- GOLD — start top-left, coil below centre twice, exit bottom-right
+           approachCP2y = 2*yEntry - yP1 ensures smooth tangent at coil entry -->
+      <!-- 1 dark amber   yEntry=152 yP1=198 → approachCP2y=106 -->
+      <path d="M 0,96  C 290,96  510,106 560,152 C 610,198 655,198 700,180 C 755,190 800,190 840,180 C 930,232 1200,432 1400,432"
+            stroke="#d97706" stroke-width="1.4" opacity="0.42" filter="url(#neon-glow)"/>
+      <!-- 2 amber        yEntry=157 yP1=194 → approachCP2y=120 -->
+      <path d="M 0,109 C 290,109 510,120 560,157 C 610,194 655,194 700,180 C 755,188 800,188 840,180 C 930,222 1200,393 1400,393"
+            stroke="#f59e0b" stroke-width="1.5" opacity="0.48" filter="url(#neon-glow)"/>
+      <!-- 3 gold          yEntry=161 yP1=191 → approachCP2y=131 -->
+      <path d="M 0,122 C 290,122 510,131 560,161 C 610,191 655,191 700,180 C 755,186 800,186 840,180 C 930,212 1200,354 1400,354"
+            stroke="#fbbf24" stroke-width="1.6" opacity="0.54" filter="url(#neon-glow)"/>
+      <!-- 4 pale gold     yEntry=165 yP1=188 → approachCP2y=142 -->
+      <path d="M 0,135 C 290,135 510,142 560,165 C 610,188 655,188 700,180 C 755,184 800,184 840,180 C 930,203 1200,315 1400,315"
+            stroke="#fde68a" stroke-width="1.7" opacity="0.60" filter="url(#neon-glow)"/>
+      <!-- 5 warm near-white  yEntry=170 yP1=185 → approachCP2y=155 -->
+      <path d="M 0,149 C 290,149 510,155 560,170 C 610,185 655,185 700,180 C 755,182 800,182 840,180 C 930,194 1200,273 1400,273"
+            stroke="#fef3c7" stroke-width="1.7" opacity="0.68" filter="url(#neon-glow)"/>
+      <!-- 6 almost white warm  yEntry=174 yP1=182 → approachCP2y=166 -->
+      <path d="M 0,163 C 290,163 510,166 560,174 C 610,182 655,182 700,180 C 755,181 800,181 840,180 C 930,186 1200,231 1400,231"
+            stroke="#fffbeb" stroke-width="1.8" opacity="0.78" filter="url(#neon-glow)"/>
+
+      <!-- WHITE centre — straight through, no coil -->
+      <path d="M 0,180 C 290,180 560,180 700,180 C 840,180 1110,180 1400,180"
+            stroke="#ffffff"  stroke-width="2.2" opacity="0.96" filter="url(#neon-glow)"/>
+
+      <!-- BLUE — start bottom-left, coil above centre twice, exit top-right
+           approachCP2y = 2*yEntry - yP1 (mirrors gold formula, same smoothness) -->
+      <!-- 8 almost white cool  yEntry=186 yP1=178 → approachCP2y=194 -->
+      <path d="M 0,197 C 290,197 510,194 560,186 C 610,178 655,178 700,180 C 755,179 800,179 840,180 C 930,174 1200,129 1400,129"
+            stroke="#f0f9ff" stroke-width="1.8" opacity="0.78" filter="url(#neon-glow)"/>
+      <!-- 9 cool near-white   yEntry=190 yP1=175 → approachCP2y=205 -->
+      <path d="M 0,211 C 290,211 510,205 560,190 C 610,175 655,175 700,180 C 755,178 800,178 840,180 C 930,166 1200,87  1400,87"
+            stroke="#e0f2fe" stroke-width="1.7" opacity="0.68" filter="url(#neon-glow)"/>
+      <!-- 10 pale blue         yEntry=195 yP1=172 → approachCP2y=218 -->
+      <path d="M 0,225 C 290,225 510,218 560,195 C 610,172 655,172 700,180 C 755,176 800,176 840,180 C 930,157 1200,45  1400,45"
+            stroke="#bae6fd" stroke-width="1.7" opacity="0.60" filter="url(#neon-glow)"/>
+      <!-- 11 sky blue           yEntry=199 yP1=169 → approachCP2y=229 -->
+      <path d="M 0,238 C 290,238 510,229 560,199 C 610,169 655,169 700,180 C 755,174 800,174 840,180 C 930,148 1200,6   1400,6"
+            stroke="#38bdf8" stroke-width="1.6" opacity="0.54" filter="url(#neon-glow)"/>
+      <!-- 12 blue               yEntry=203 yP1=166 → approachCP2y=240 -->
+      <path d="M 0,251 C 290,251 510,240 560,203 C 610,166 655,166 700,180 C 755,172 800,172 840,180 C 930,138 1200,-33 1400,-33"
+            stroke="#0ea5e9" stroke-width="1.5" opacity="0.48" filter="url(#neon-glow)"/>
+      <!-- 13 deep blue          yEntry=208 yP1=162 → approachCP2y=254 -->
+      <path d="M 0,264 C 290,264 510,254 560,208 C 610,162 655,162 700,180 C 755,170 800,170 840,180 C 930,128 1200,-72 1400,-72"
+            stroke="#0284c7" stroke-width="1.4" opacity="0.42" filter="url(#neon-glow)"/>
+    </svg>
+  </div>
+
+  <!-- Subtitle below the graphic -->
+  <div id="label-center-sub" style="opacity:0;text-align:center;margin-top:-5.5rem">
+    <span class="gemini-center-sub" style="font-size:0.72rem;color:var(--muted);letter-spacing:0.06em">The bridge between now and your first offer</span>
+  </div>
+
+  <!-- Headline + CTA — fades in after paths are drawn -->
+  <div id="hero-text">
     <h1>Land your<br>first <em>internship</em></h1>
-    <p style="max-width:480px;margin:0 auto 2rem">Finance, law, tech, consulting, engineering — one platform to take you from "no idea" to signed offer, whatever path you're chasing.</p>
-    <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap">
-      <button onclick="startExploring()" class="btn btn-primary btn-lg">Start exploring</button>
-      <a href="/signup.html" class="btn btn-outline btn-lg">Get started free</a>
+    <p>Whatever you're chasing — one platform to take you from "no idea" to signed offer.</p>
+    <div class="hero-cta-row">
+      <a href="/signup.html" class="btn btn-primary btn-lg">Get started free</a>
+      <a href="#journey-section" class="btn btn-outline btn-lg" onclick="document.getElementById('journey-section').scrollIntoView({behavior:'smooth'});return false;">See how it works</a>
     </div>
-    <div class="hero-stats">
-      <div><span class="n">15+</span><span class="l">Sectors covered — finance, law, tech, consulting & more</span></div>
-      <div><span class="n">Expert-led</span><span class="l">AI coaching trained on real industry knowledge</span></div>
-      <div><span class="n">1,000+</span><span class="l">Internships secured at top Australian firms</span></div>
+  </div>
+
+</section>
+
+<!-- ═══════════════════════════════════════
+     STATS BAND
+════════════════════════════════════════ -->
+<div class="stats-band">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <span class="stat-n">15+</span>
+      <span class="stat-l">Sectors — finance, law, tech, consulting &amp; more</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-n">Expert-led</span>
+      <span class="stat-l">AI coaching trained on real industry knowledge</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-n">1,000+</span>
+      <span class="stat-l">Internships secured at top Australian firms</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     JOURNEY — Three.js scroll scene
+════════════════════════════════════════ -->
+<section id="journey-section">
+  <div id="journey-sticky">
+    <canvas id="journey-canvas"></canvas>
+
+    <div class="journey-header">
+      <div class="journey-header-tag">The journey</div>
+    </div>
+
+    <!-- Text panels -->
+    <div id="journey-overlay">
+
+      <div class="journey-stage" id="jstage-0" style="opacity:1">
+        <div class="stage-eyebrow">01 — Discover</div>
+        <h2>Explore your options.<br>Find your direction.</h2>
+        <p>Most students apply without knowing what they're really walking into. Launchpad gives you the full picture — hours, pay, culture, exit opps — before you commit.</p>
+        <ul class="journey-list">
+          <li>Role explorer across 15+ sectors with real AU data</li>
+          <li>Side-by-side role comparison — Software Eng vs IB vs Law</li>
+          <li>AI skills gap analysis tailored to your degree and year</li>
+          <li>Year-by-year personalised roadmap with AU recruiting calendar</li>
+        </ul>
+      </div>
+
+      <div class="journey-stage" id="jstage-1">
+        <div class="stage-eyebrow">02 — Build</div>
+        <h2>Become the candidate<br>they actually want.</h2>
+        <p>A good CV isn't enough. You need an outreach strategy, an organised pipeline, and the discipline to follow through. Launchpad runs all of it.</p>
+        <ul class="journey-list">
+          <li>CV builder with AI bullet feedback — sector-specific rewrites</li>
+          <li>Australian cold outreach templates — 5 scenarios, warm tone</li>
+          <li>Outreach tracker — replies, warmth signals, follow-up dates</li>
+          <li>Application tracker across LinkedIn, Seek, GradConnection &amp; more</li>
+        </ul>
+      </div>
+
+      <div class="journey-stage" id="jstage-2">
+        <div class="stage-eyebrow">03 — Prepare</div>
+        <h2>Walk into every<br>conversation ready.</h2>
+        <p>From the first coffee chat to the final round, Launchpad prepares you for every stage — with personalised coaching, not generic scripts.</p>
+        <ul class="journey-list">
+          <li>Coffee chat prep from any LinkedIn bio — questions, openers, closers</li>
+          <li>Mock interviews — behavioural (STAR), case, technical, AC</li>
+          <li>Audio coaching — AI feedback on tone, filler words, STAR structure</li>
+          <li>Follow-up strategy, thank-you notes, and referral asks</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Nav dots -->
+    <div id="journey-nav">
+      <div class="jp-dot active" data-stage="0"><span>Discover</span></div>
+      <div class="jp-dot"        data-stage="1"><span>Build</span></div>
+      <div class="jp-dot"        data-stage="2"><span>Prepare</span></div>
+    </div>
+
+    <div class="journey-scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
     </div>
   </div>
 </section>
 
-<!-- How it works -->
-<section class="section" id="how">
-  <div class="container">
-    <div style="margin-bottom:3rem">
-      <div style="font-size:0.7rem;font-weight:600;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem">The framework</div>
-      <h2 style="max-width:500px">From exploration<br>to signed offer.</h2>
-    </div>
-
-    <div class="grid-3" style="margin-bottom:2rem">
-      <div class="feature-card" onclick="location.href='/signup.html'">
-        <span style="display:block;font-family:'Syne',sans-serif;font-size:0.72rem;font-weight:700;color:var(--white);letter-spacing:0.12em;margin-bottom:1.25rem;opacity:0.5">01</span>
-        <h3>Discover</h3>
-        <p>Explore roles, compare careers, and build a roadmap built around your degree and ambitions.</p>
-        <div style="margin-top:1.5rem;font-size:0.78rem;color:var(--muted)">Explore roles →</div>
-      </div>
-      <div class="feature-card" onclick="location.href='/signup.html'">
-        <span style="display:block;font-family:'Syne',sans-serif;font-size:0.72rem;font-weight:700;color:var(--white);letter-spacing:0.12em;margin-bottom:1.25rem;opacity:0.5">02</span>
-        <h3>Build</h3>
-        <p>Craft a standout CV, send cold outreach that gets replies, and track every application.</p>
-        <div style="margin-top:1.5rem;font-size:0.78rem;color:var(--muted)">Build your profile →</div>
-      </div>
-      <div class="feature-card" onclick="location.href='/signup.html'">
-        <span style="display:block;font-family:'Syne',sans-serif;font-size:0.72rem;font-weight:700;color:var(--white);letter-spacing:0.12em;margin-bottom:1.25rem;opacity:0.5">03</span>
-        <h3>Prepare</h3>
-        <p>Tailored coffee chat prep, mock interviews, audio coaching. Walk in ready.</p>
-        <div style="margin-top:1.5rem;font-size:0.78rem;color:var(--muted)">Start preparing →</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Feature details -->
-<section class="section" style="border-top:1px solid var(--border)">
+<!-- ═══════════════════════════════════════
+     FEATURE DETAIL ROWS
+════════════════════════════════════════ -->
+<section class="section" style="border-top:1px solid var(--border)" id="how">
   <div class="container">
 
     <div class="feat-row">
@@ -176,7 +618,7 @@
         <h2>Stop guessing.<br>Explore with clarity.</h2>
         <p>Compare Software Engineer vs. Solicitor vs. IB Analyst side by side. Hear from real professionals. Simulate what a day in your target role actually feels like.</p>
         <ul class="feat-list">
-          <li>15+ sectors — finance, law, tech, consulting, engineering & more</li>
+          <li>15+ sectors — finance, law, tech, consulting, engineering &amp; more</li>
           <li>Role comparison — hours, AU pay, exit opps, culture</li>
           <li>AI job simulation — live a day in the role</li>
           <li>Personalised skills gap + year-by-year roadmap</li>
@@ -188,19 +630,15 @@
           <div style="flex:1;background:var(--navy-light);border-radius:4px;padding:1rem;border:1px solid var(--border-strong)">
             <div style="font-weight:700;font-size:0.85rem;color:var(--white);margin-bottom:0.75rem">Software Eng.</div>
             <div style="font-size:0.75rem;color:var(--muted);display:flex;flex-direction:column;gap:0.35rem">
-              <div>40–50 hrs / week</div>
-              <div>AU$75–95k base</div>
-              <div>Product, Startup exits</div>
-              <div>Flexible culture</div>
+              <div>40–50 hrs / week</div><div>AU$75–95k base</div>
+              <div>Product, Startup exits</div><div>Flexible culture</div>
             </div>
           </div>
           <div style="flex:1;background:var(--navy-light);border-radius:4px;padding:1rem;border:1px solid var(--border)">
             <div style="font-weight:700;font-size:0.85rem;color:var(--white);margin-bottom:0.75rem">Inv. Banking</div>
             <div style="font-size:0.75rem;color:var(--muted);display:flex;flex-direction:column;gap:0.35rem">
-              <div>70–90 hrs / week</div>
-              <div>AU$80–100k base</div>
-              <div>PE, VC exits</div>
-              <div>Demanding culture</div>
+              <div>70–90 hrs / week</div><div>AU$80–100k base</div>
+              <div>PE, VC exits</div><div>Demanding culture</div>
             </div>
           </div>
         </div>
@@ -231,7 +669,7 @@
           <li>CV feedback tailored to your sector and target firm</li>
           <li>Australian-style cold outreach templates — 5 scenarios</li>
           <li>Outreach tracker — replies, warmth, follow-up dates</li>
-          <li>Application tracker across LinkedIn, Seek, GradConnection & more</li>
+          <li>Application tracker across LinkedIn, Seek, GradConnection &amp; more</li>
         </ul>
       </div>
     </div>
@@ -273,7 +711,9 @@
   </div>
 </section>
 
-<!-- CTA -->
+<!-- ═══════════════════════════════════════
+     CTA
+════════════════════════════════════════ -->
 <div class="cta-strip">
   <div class="container">
     <div style="max-width:560px;margin:0 auto">
@@ -291,25 +731,8 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
-<script src="/static/globe.js"></script>
 <script src="/static/glow.js"></script>
-<script>
-function startExploring() {
-  // Scroll to the #how section
-  const how = document.getElementById('how');
-  if (how) how.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-  // After scroll settles, pulse each framework card in sequence
-  setTimeout(() => {
-    const cards = document.querySelectorAll('#how .feature-card');
-    cards.forEach((card, i) => {
-      setTimeout(() => {
-        card.classList.add('step-active');
-        setTimeout(() => card.classList.remove('step-active'), 1200);
-      }, i * 500);
-    });
-  }, 700);
-}
-</script>
+<script src="/static/landing.js"></script>
+<script src="/static/journey.js"></script>
 </body>
 </html>
