@@ -15,8 +15,8 @@
       content: ''; display: inline-block; width: 28px; height: 1px;
       background: rgba(255,255,255,0.3);
     }
-    .hero h1 { font-size: clamp(2.6rem, 5.5vw, 4.8rem); font-weight: 700; line-height: 1.08; letter-spacing: -0.02em; padding-bottom: 0.1em; }
-    .hero h1 em { font-style: normal; color: var(--white); border-bottom: 2px solid rgba(255,255,255,0.25); }
+    .hero h1 { font-family: 'Cormorant', serif; font-size: clamp(3.2rem, 6.5vw, 5.8rem); font-weight: 600; line-height: 1.05; letter-spacing: -0.01em; padding-bottom: 0.15em; overflow: visible; }
+    .hero h1 em { font-style: italic; color: var(--white); }
     .hero-stats { display: flex; justify-content: center; gap: 3rem; margin-top: 3.5rem; padding-top: 3.5rem; border-top: 1px solid var(--border); }
     .hero-stats div { text-align: center; }
     .hero-stats .n { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; color: var(--white); display: block; }
@@ -26,7 +26,7 @@
     .feat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; padding: 5rem 0; border-top: 1px solid var(--border); }
     .feat-row:last-child { border-bottom: 1px solid var(--border); }
     .feat-tag { font-size: 0.7rem; font-weight: 600; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1rem; }
-    .feat-row h2 { font-size: 1.75rem; margin-bottom: 1rem; }
+    .feat-row h2 { font-size: 1.75rem; margin-bottom: 1rem; overflow: visible; padding-bottom: 0.15em; }
     .feat-list { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; margin-top: 1.5rem; }
     .feat-list li { display: flex; gap: 0.75rem; align-items: flex-start; font-size: 0.875rem; color: var(--muted); }
     .feat-list li::before { content: '—'; color: var(--border-strong); flex-shrink: 0; }
@@ -86,30 +86,24 @@
       <h2 style="max-width:500px">From exploration<br>to signed offer.</h2>
     </div>
 
-    <div class="grid-4" style="margin-bottom:2rem">
+    <div class="grid-3" style="margin-bottom:2rem">
       <div class="feature-card" onclick="location.href='/signup.html'">
-        <span class="fc-icon">01</span>
+        <span style="display:block;font-family:'Syne',sans-serif;font-size:0.72rem;font-weight:700;color:var(--white);letter-spacing:0.12em;margin-bottom:1.25rem;opacity:0.5">01</span>
         <h3>Discover</h3>
         <p>Explore roles, compare careers, and build a roadmap built around your degree and ambitions.</p>
         <div style="margin-top:1.5rem;font-size:0.78rem;color:var(--muted)">Explore roles →</div>
       </div>
       <div class="feature-card" onclick="location.href='/signup.html'">
-        <span class="fc-icon">02</span>
+        <span style="display:block;font-family:'Syne',sans-serif;font-size:0.72rem;font-weight:700;color:var(--white);letter-spacing:0.12em;margin-bottom:1.25rem;opacity:0.5">02</span>
         <h3>Build</h3>
         <p>Craft a standout CV, send cold outreach that gets replies, and track every application.</p>
         <div style="margin-top:1.5rem;font-size:0.78rem;color:var(--muted)">Build your profile →</div>
       </div>
       <div class="feature-card" onclick="location.href='/signup.html'">
-        <span class="fc-icon">03</span>
+        <span style="display:block;font-family:'Syne',sans-serif;font-size:0.72rem;font-weight:700;color:var(--white);letter-spacing:0.12em;margin-bottom:1.25rem;opacity:0.5">03</span>
         <h3>Prepare</h3>
         <p>Tailored coffee chat prep, mock interviews, audio coaching. Walk in ready.</p>
         <div style="margin-top:1.5rem;font-size:0.78rem;color:var(--muted)">Start preparing →</div>
-      </div>
-      <div class="feature-card" onclick="location.href='/signup.html'">
-        <span class="fc-icon">04</span>
-        <h3>Track</h3>
-        <p>Weekly goals, streak tracking, and milestone badges to keep you accountable.</p>
-        <div style="margin-top:1.5rem;font-size:0.78rem;color:var(--muted)">Stay on track →</div>
       </div>
     </div>
   </div>
