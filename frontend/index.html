@@ -26,7 +26,7 @@
     .feat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; padding: 5rem 0; border-top: 1px solid var(--border); }
     .feat-row:last-child { border-bottom: 1px solid var(--border); }
     .feat-tag { font-size: 0.7rem; font-weight: 600; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1rem; }
-    .feat-row h2 { font-size: 1.75rem; margin-bottom: 1rem; overflow: visible; padding-bottom: 0.15em; }
+    .feat-row h2 { font-size: 1.75rem; margin-bottom: 1rem; overflow: visible; padding-bottom: 0.3em; line-height: 1.25; }
     .feat-list { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; margin-top: 1.5rem; }
     .feat-list li { display: flex; gap: 0.75rem; align-items: flex-start; font-size: 0.875rem; color: var(--muted); }
     .feat-list li::before { content: '—'; color: var(--border-strong); flex-shrink: 0; }
@@ -58,7 +58,6 @@
 <script>
   if (localStorage.getItem('userId')) {
     document.getElementById('login-btn').href = '/dashboard.html';
-    document.getElementById('login-btn').textContent = 'Dashboard →';
   }
 </script>
 
@@ -72,9 +71,9 @@
     <a href="#how" class="btn btn-outline btn-lg">See how it works</a>
   </div>
   <div class="hero-stats">
-    <div><span class="n">4</span><span class="l">Career stages</span></div>
-    <div><span class="n">1000+</span><span class="l">Students guided</span></div>
-    <div><span class="n">100%</span><span class="l">Built for students</span></div>
+    <div><span class="n">40+</span><span class="l">Roles from IB to Big Tech</span></div>
+    <div><span class="n">1:1</span><span class="l">Advice tailored to your profile</span></div>
+    <div><span class="n">Top firms</span><span class="l">Goldman, McKinsey, Google & more</span></div>
   </div>
 </section>
 
