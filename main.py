@@ -5,24 +5,29 @@ from fastapi.responses import FileResponse
 from pathlib import Path
 
 from database import init_db
-from routers import cv, email, interview, application, user
+from routers import user, application
+from routers import discover, build, prepare, gamification, testimonials
 
-app = FastAPI(title="AI Career Assistant", version="1.0.0")
+app = FastAPI(title="AI Career Assistant", version="2.0.0")
 
-# Initialise database on startup
+
 @app.on_event("startup")
 async def startup():
     init_db()
 
 
-# Register all bot routers
+# Core routers
 app.include_router(user.router)
-app.include_router(cv.router)
-app.include_router(email.router)
-app.include_router(interview.router)
 app.include_router(application.router)
 
-# Serve frontend static files
+# New module routers
+app.include_router(discover.router)
+app.include_router(build.router)
+app.include_router(prepare.router)
+app.include_router(gamification.router)
+app.include_router(testimonials.router)
+
+# Serve frontend
 frontend_dir = Path(__file__).parent / "frontend"
 app.mount("/static", StaticFiles(directory=str(frontend_dir)), name="static")
 

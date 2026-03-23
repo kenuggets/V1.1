@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prepare — Launchpad</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="/dashboard.html" class="logo">🚀 <span>Launch</span>pad</a>
+  <nav>
+    <a href="/discover.html">🔭 Discover</a>
+    <a href="/build.html">🛠️ Build</a>
+    <a href="/prepare.html" class="active">🎯 Prepare</a>
+    <a href="/dashboard.html">📊 Dashboard</a>
+  </nav>
+  <div class="user-chip"><span id="nav-name">You</span></div>
+</nav>
+
+<div class="container" style="padding-top:2rem;padding-bottom:3rem">
+
+  <div class="page-header-inner">
+    <h2>🎯 Prepare</h2>
+    <p>Coffee chats, mock interviews, audio coaching, and follow-up strategy.</p>
+  </div>
+
+  <div class="tabs" style="margin-bottom:2rem">
+    <div class="tab active" onclick="switchTab('coffee')">Coffee Chat Prep</div>
+    <div class="tab" onclick="switchTab('interview')">Mock Interview</div>
+    <div class="tab" onclick="switchTab('tracker')">Chat & Interview Tracker</div>
+    <div class="tab" onclick="switchTab('internship')">Internship Guide</div>
+  </div>
+
+  <!-- ── Coffee Chat Prep ── -->
+  <div class="tab-content active" id="tab-coffee">
+    <div class="grid-2" style="margin-bottom:1.5rem">
+      <div class="card">
+        <h4 style="margin-bottom:1rem">About your meeting</h4>
+        <div style="display:flex;flex-direction:column;gap:0.85rem">
+          <div class="grid-2">
+            <div class="form-group"><label>Contact Name</label><input type="text" id="cc-name" placeholder="Sarah Chen" /></div>
+            <div class="form-group"><label>Their Role</label><input type="text" id="cc-role" placeholder="Managing Director" /></div>
+          </div>
+          <div class="form-group"><label>Their Company</label><input type="text" id="cc-company" placeholder="Goldman Sachs" /></div>
+          <div class="form-group"><label>Your target role</label><input type="text" id="cc-target" placeholder="Investment Banking Analyst" /></div>
+          <div class="form-group"><label>Date (optional)</label><input type="date" id="cc-date" /></div>
+          <div class="form-group">
+            <label>Paste their LinkedIn bio / background</label>
+            <textarea id="cc-info" placeholder="Paste their LinkedIn summary, career history, or any relevant background info here..." style="min-height:120px"></textarea>
+          </div>
+          <button class="btn btn-primary w-full" onclick="prepCoffeeChat()">Generate my prep guide ✨</button>
+        </div>
+      </div>
+
+      <!-- Audio Practice -->
+      <div class="card">
+        <h4 style="margin-bottom:0.5rem">Conversation Practice</h4>
+        <p style="font-size:0.85rem;margin-bottom:1.25rem">Practice your opening or answers. Record yourself and get AI feedback on tone, rapport, and confidence.</p>
+        <div style="margin-bottom:1rem">
+          <div class="form-group"><label>What are you practising?</label>
+            <input type="text" id="audio-question" placeholder="e.g. My 60-second intro, or 'Tell me about yourself'" />
+          </div>
+        </div>
+        <div style="display:flex;gap:0.75rem;align-items:center;margin-bottom:1rem">
+          <button class="record-btn" id="record-btn" onclick="toggleRecording()">🎙️ Start Recording</button>
+          <span style="font-size:0.82rem;color:var(--muted)" id="record-status">Click to record</span>
+        </div>
+        <div class="transcript-box" id="transcript-box">Your transcript will appear here as you speak...</div>
+        <button class="btn btn-ghost btn-sm w-full" style="margin-top:0.75rem" id="feedback-btn" onclick="getAudioFeedback()" disabled>Get feedback →</button>
+      </div>
+    </div>
+
+    <div id="coffee-prep-result"></div>
+  </div>
+
+  <!-- ── Mock Interview ── -->
+  <div class="tab-content" id="tab-interview">
+    <div id="interview-setup">
+      <div class="card" style="margin-bottom:1.5rem">
+        <h4 style="margin-bottom:1rem">Set up your mock interview</h4>
+        <div style="display:flex;flex-direction:column;gap:1rem">
+          <div class="grid-2">
+            <div class="form-group"><label>Role</label><input type="text" id="iv-role" placeholder="Investment Banking Analyst" /></div>
+            <div class="form-group"><label>Company (optional)</label><input type="text" id="iv-company" placeholder="Goldman Sachs" /></div>
+          </div>
+          <div class="form-group"><label>Interview Type</label>
+            <select id="iv-type">
+              <option value="Behavioural">Behavioural</option>
+              <option value="Technical (Finance)">Technical — Finance</option>
+              <option value="Technical (Tech)">Technical — Tech / Coding</option>
+              <option value="Case">Case Interview</option>
+              <option value="Group">Group Exercise</option>
+              <option value="Assessment Centre">Assessment Centre</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Interviewer background (optional — paste LinkedIn bio for tailored questions)</label>
+            <textarea id="iv-interviewer" placeholder="Optional: paste the interviewer's background for tailored questions..." style="min-height:70px"></textarea>
+          </div>
+          <button class="btn btn-primary" onclick="startInterview()">Start mock interview →</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="interview-session" class="hidden">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:0.75rem">
+        <div style="display:flex;align-items:center;gap:0.75rem">
+          <span style="font-size:1.3rem">🎤</span>
+          <div>
+            <div style="font-weight:600;font-size:0.9rem" id="iv-session-title">Mock Interview</div>
+            <div style="font-size:0.78rem;color:var(--muted)">Answer each question as you would in a real interview.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:0.75rem;align-items:center">
+          <button class="record-btn" id="iv-record-btn" onclick="toggleIvRecording()">🎙️ Record answer</button>
+          <button class="btn btn-outline btn-sm" onclick="resetInterview()">New session</button>
+        </div>
+      </div>
+      <div id="iv-transcript-preview" class="transcript-box hidden" style="margin-bottom:0.75rem"></div>
+      <div class="chat-wrap">
+        <div class="chat-messages" id="iv-messages"></div>
+        <div class="chat-input-row">
+          <input type="text" id="iv-input" placeholder="Type your answer here..." onkeydown="if(event.key==='Enter')sendInterview()" />
+          <button class="btn btn-primary" onclick="sendInterview()">Answer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Tracker ── -->
+  <div class="tab-content" id="tab-tracker">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:1rem">
+      <h4>Coffee Chats & Interviews</h4>
+      <div style="display:flex;gap:0.5rem">
+        <button class="btn btn-primary btn-sm" onclick="switchTab('coffee')">+ Coffee chat prep</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Contact</th><th>Role & Company</th><th>Date</th><th>Outcome</th><th>Thank You?</th><th>Follow Up</th><th></th></tr></thead>
+        <tbody id="chats-table"></tbody>
+      </table>
+    </div>
+    <div id="chats-empty" class="hidden" style="text-align:center;padding:3rem;color:var(--muted)">
+      <div style="font-size:2rem;margin-bottom:0.5rem">☕</div>
+      <p>No coffee chats tracked yet. Prep one above to add it here.</p>
+    </div>
+    <hr class="divider" style="margin:2rem 0"/>
+    <h4 style="margin-bottom:1.25rem">Follow-Up Strategy Generator</h4>
+    <div class="card">
+      <div style="display:flex;flex-direction:column;gap:1rem">
+        <div class="grid-2">
+          <div class="form-group"><label>Contact Name</label><input type="text" id="fu-name" placeholder="Sarah Chen" /></div>
+          <div class="form-group"><label>Their Role</label><input type="text" id="fu-role" placeholder="MD at Goldman Sachs" /></div>
+        </div>
+        <div class="form-group"><label>Company</label><input type="text" id="fu-company" placeholder="Goldman Sachs" /></div>
+        <div class="form-group"><label>How did it go?</label>
+          <select id="fu-outcome">
+            <option value="went well">It went well — good connection</option>
+            <option value="ok">It was OK — decent conversation</option>
+            <option value="short">It was brief — hard to connect</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Topics discussed (optional)</label><input type="text" id="fu-topics" placeholder="e.g. their career path, advice for breaking in, firm culture..." /></div>
+        <div class="form-group"><label>Your target role</label><input type="text" id="fu-target" placeholder="Investment Banking Analyst" /></div>
+        <button class="btn btn-primary w-full" onclick="getFollowupStrategy()">Generate follow-up strategy →</button>
+      </div>
+    </div>
+    <div id="followup-result" style="margin-top:1.5rem"></div>
+  </div>
+
+  <!-- ── Internship Guide ── -->
+  <div class="tab-content" id="tab-internship">
+    <div class="card" style="margin-bottom:1.5rem">
+      <h4 style="margin-bottom:0.5rem">Internship Success Guide</h4>
+      <p style="font-size:0.88rem;margin-bottom:1rem">Landed an offer? Get a personalised guide on how to make the most of your internship, build relationships, deliver great work, and secure a return offer.</p>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-end">
+        <div class="form-group" style="flex:2;min-width:200px"><label>Role</label><input type="text" id="ig-role" placeholder="Investment Banking Analyst" /></div>
+        <div class="form-group" style="flex:1;min-width:160px"><label>Company</label><input type="text" id="ig-company" placeholder="Goldman Sachs" /></div>
+        <button class="btn btn-primary" onclick="getInternshipGuide()">Get my guide →</button>
+      </div>
+    </div>
+    <div id="internship-result"></div>
+  </div>
+
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+const userId = localStorage.getItem('userId');
+if (!userId) location.href = '/signup.html';
+document.getElementById('nav-name').textContent = (localStorage.getItem('userName') || 'You').split(' ')[0];
+
+const ivMessages = [];
+let recognition = null, isRecording = false, transcript = '';
+let ivRecognition = null, ivIsRecording = false, ivTranscript = '';
+
+function switchTab(name) {
+  const tabs = ['coffee','interview','tracker','internship'];
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', tabs[i] === name));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById(`tab-${name}`).classList.add('active');
+  if (name === 'tracker') loadChats();
+}
+
+// ── Coffee Chat Prep ──
+async function prepCoffeeChat() {
+  const name    = document.getElementById('cc-name').value.trim();
+  const role    = document.getElementById('cc-role').value.trim();
+  const company = document.getElementById('cc-company').value.trim();
+  const target  = document.getElementById('cc-target').value.trim();
+  const info    = document.getElementById('cc-info').value.trim();
+  if (!name || !info) { showToast('Please fill in the contact name and their background.', 'error'); return; }
+  document.getElementById('coffee-prep-result').innerHTML = '<div class="card" style="text-align:center;padding:2rem;color:var(--muted)">⏳ Generating your prep guide...</div>';
+  try {
+    const res = await fetch('/api/prepare/coffee-chat-prep', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        user_id: parseInt(userId), contact_name: name, contact_role: role,
+        contact_company: company, contact_info: info,
+        target_role: target, scheduled_date: document.getElementById('cc-date').value,
+      }),
+    });
+    const data = await res.json();
+    document.getElementById('coffee-prep-result').innerHTML = `
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1.25rem">
+          <span style="font-size:1.3rem">☕</span>
+          <h4>Prep Guide: Coffee chat with ${name}</h4>
+        </div>
+        <div class="prose">${formatMarkdown(data.prep)}</div>
+      </div>`;
+    showToast('Prep guide ready! ☕', 'success');
+  } catch(e) { showToast('Error generating guide.', 'error'); }
+}
+
+// ── Audio Recording ──
+function toggleRecording() {
+  if (isRecording) stopRecording();
+  else startRecording();
+}
+
+function startRecording() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) { showToast('Speech recognition not supported in this browser. Try Chrome.', 'error'); return; }
+  recognition = new SpeechRecognition();
+  recognition.continuous = true; recognition.interimResults = true; recognition.lang = 'en-GB';
+  transcript = '';
+  recognition.onresult = (e) => {
+    let interim = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) transcript += e.results[i][0].transcript + ' ';
+      else interim += e.results[i][0].transcript;
+    }
+    document.getElementById('transcript-box').textContent = transcript + interim;
+  };
+  recognition.start();
+  isRecording = true;
+  const btn = document.getElementById('record-btn');
+  btn.classList.add('recording'); btn.textContent = '⏹️ Stop Recording';
+  document.getElementById('record-status').textContent = 'Recording...';
+}
+
+function stopRecording() {
+  if (recognition) recognition.stop();
+  isRecording = false;
+  const btn = document.getElementById('record-btn');
+  btn.classList.remove('recording'); btn.textContent = '🎙️ Start Recording';
+  document.getElementById('record-status').textContent = 'Recording stopped';
+  if (transcript.trim()) document.getElementById('feedback-btn').disabled = false;
+}
+
+async function getAudioFeedback() {
+  if (!transcript.trim()) { showToast('No transcript yet — record something first.', 'error'); return; }
+  const question = document.getElementById('audio-question').value.trim();
+  const btn = document.getElementById('feedback-btn');
+  btn.textContent = 'Analysing...'; btn.disabled = true;
+  try {
+    const res = await fetch('/api/prepare/audio-feedback', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        transcript, user_id: parseInt(userId),
+        context_type: 'coffee_chat', question,
+      }),
+    });
+    const data = await res.json();
+    btn.textContent = 'Get feedback →'; btn.disabled = false;
+    const existing = document.getElementById('audio-feedback-result');
+    if (existing) existing.remove();
+    const div = document.createElement('div');
+    div.id = 'audio-feedback-result';
+    div.className = 'card'; div.style.marginTop = '1rem';
+    div.innerHTML = `<h4 style="margin-bottom:0.75rem">🎙️ Audio Feedback</h4><div class="prose">${formatMarkdown(data.feedback)}</div>`;
+    document.getElementById('tab-coffee').appendChild(div);
+    showToast('Feedback ready! 🎙️', 'success');
+  } catch(e) { showToast('Error.', 'error'); btn.textContent = 'Get feedback →'; btn.disabled = false; }
+}
+
+// ── Interview ──
+async function startInterview() {
+  const role = document.getElementById('iv-role').value.trim();
+  if (!role) { showToast('Enter a role first.', 'error'); return; }
+  const company = document.getElementById('iv-company').value.trim();
+  const type = document.getElementById('iv-type').value;
+  const interviewer = document.getElementById('iv-interviewer').value.trim();
+  document.getElementById('iv-session-title').textContent = `${type} Interview — ${role}${company ? ' @ ' + company : ''}`;
+  document.getElementById('interview-setup').classList.add('hidden');
+  document.getElementById('interview-session').classList.remove('hidden');
+  ivMessages.length = 0;
+  showTypingIv();
+  try {
+    const res = await fetch('/api/prepare/interview/start', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ user_id: parseInt(userId), role, company, interview_type: type, interviewer_info: interviewer }),
+    });
+    removeTypingIv();
+    const data = await res.json();
+    ivMessages.push({ role: 'assistant', content: data.reply });
+    addIvMsg('ai', data.reply);
+  } catch(e) { removeTypingIv(); showToast('Error.', 'error'); }
+}
+
+async function sendInterview() {
+  const input = document.getElementById('iv-input');
+  let text = input.value.trim();
+  if (!text && ivTranscript.trim()) text = ivTranscript;
+  if (!text) return;
+  input.value = ''; ivTranscript = '';
+  document.getElementById('iv-transcript-preview').classList.add('hidden');
+  ivMessages.push({ role: 'user', content: text });
+  addIvMsg('user', text);
+  showTypingIv();
+  try {
+    const res = await fetch('/api/prepare/interview/chat', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ messages: ivMessages, user_id: parseInt(userId) }),
+    });
+    removeTypingIv();
+    const data = await res.json();
+    ivMessages.push({ role: 'assistant', content: data.reply });
+    addIvMsg('ai', data.reply);
+    if (data.scores) showScores(data.scores);
+  } catch(e) { removeTypingIv(); showToast('Error.', 'error'); }
+}
+
+function addIvMsg(type, text) {
+  const msgs = document.getElementById('iv-messages');
+  const div = document.createElement('div');
+  div.className = `msg ${type}`;
+  const avatar = type === 'ai' ? '🎤' : '👤';
+  div.innerHTML = `<div class="msg-avatar">${avatar}</div><div class="msg-bubble">${text}</div>`;
+  msgs.appendChild(div); msgs.scrollTop = msgs.scrollHeight;
+}
+
+function showTypingIv() {
+  const msgs = document.getElementById('iv-messages');
+  const div = document.createElement('div');
+  div.className = 'msg ai'; div.id = 'iv-typing';
+  div.innerHTML = '<div class="msg-avatar">🎤</div><div class="msg-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
+  msgs.appendChild(div); msgs.scrollTop = msgs.scrollHeight;
+}
+function removeTypingIv() { document.getElementById('iv-typing')?.remove(); }
+
+function showScores(scores) {
+  const existing = document.getElementById('score-strip');
+  if (existing) existing.remove();
+  const bar = document.createElement('div');
+  bar.id = 'score-strip';
+  bar.style.cssText = 'display:flex;gap:1rem;padding:0.75rem 1rem;background:var(--navy);border-top:1px solid var(--border);font-size:0.8rem;flex-wrap:wrap';
+  ['content','structure','conciseness'].forEach(k => {
+    const v = scores[k] || 0;
+    const colour = v >= 4 ? 'var(--green)' : v >= 3 ? 'var(--gold)' : 'var(--red)';
+    bar.innerHTML += `<div style="display:flex;align-items:center;gap:0.4rem"><span style="color:var(--muted)">${k[0].toUpperCase()+k.slice(1)}:</span><span style="color:${colour};font-weight:700">${v}/5</span></div>`;
+  });
+  document.querySelector('.chat-wrap').appendChild(bar);
+}
+
+function resetInterview() {
+  document.getElementById('interview-setup').classList.remove('hidden');
+  document.getElementById('interview-session').classList.add('hidden');
+  document.getElementById('iv-messages').innerHTML = '';
+  ivMessages.length = 0;
+  document.getElementById('score-strip')?.remove();
+}
+
+// ── IV Audio Recording ──
+function toggleIvRecording() {
+  if (ivIsRecording) stopIvRecording();
+  else startIvRecording();
+}
+function startIvRecording() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) { showToast('Speech recognition requires Chrome.', 'error'); return; }
+  ivRecognition = new SpeechRecognition();
+  ivRecognition.continuous = true; ivRecognition.interimResults = true; ivRecognition.lang = 'en-GB';
+  ivTranscript = '';
+  ivRecognition.onresult = (e) => {
+    let interim = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) ivTranscript += e.results[i][0].transcript + ' ';
+      else interim += e.results[i][0].transcript;
+    }
+    const box = document.getElementById('iv-transcript-preview');
+    box.textContent = ivTranscript + interim; box.classList.remove('hidden');
+  };
+  ivRecognition.start(); ivIsRecording = true;
+  const btn = document.getElementById('iv-record-btn');
+  btn.classList.add('recording'); btn.textContent = '⏹️ Stop & Send';
+}
+function stopIvRecording() {
+  if (ivRecognition) ivRecognition.stop();
+  ivIsRecording = false;
+  const btn = document.getElementById('iv-record-btn');
+  btn.classList.remove('recording'); btn.textContent = '🎙️ Record answer';
+  if (ivTranscript.trim()) {
+    document.getElementById('iv-input').value = ivTranscript.trim();
+    sendInterview();
+  }
+}
+
+// ── Tracker ──
+async function loadChats() {
+  const res = await fetch(`/api/prepare/coffee-chats/${userId}`);
+  const data = await res.json();
+  const tbody = document.getElementById('chats-table');
+  const empty = document.getElementById('chats-empty');
+  if (!data.chats || data.chats.length === 0) { tbody.innerHTML = ''; empty.classList.remove('hidden'); return; }
+  empty.classList.add('hidden');
+  tbody.innerHTML = data.chats.map(c => `
+    <tr>
+      <td style="font-weight:600;color:var(--white)">${c.contact_name}</td>
+      <td><div style="font-size:0.88rem">${c.contact_role||'—'}</div><div style="font-size:0.78rem;color:var(--muted)">${c.contact_company||''}</div></td>
+      <td style="color:var(--muted);font-size:0.85rem">${c.scheduled_date||'—'}</td>
+      <td>${c.outcome ? `<span class="pill pill-green">${c.outcome}</span>` : '<span class="pill pill-muted">pending</span>'}</td>
+      <td>${c.thank_you_sent ? '<span class="pill pill-green">✓ Sent</span>' : '<button class="btn btn-outline btn-sm" onclick="markThankYou('+c.id+')">Mark sent</button>'}</td>
+      <td style="color:var(--muted);font-size:0.85rem">${c.follow_up_date||'—'}</td>
+      <td></td>
+    </tr>`).join('');
+}
+
+async function markThankYou(id) {
+  await fetch(`/api/prepare/coffee-chats/${id}`, {
+    method:'PATCH', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ thank_you_sent: true }),
+  });
+  loadChats();
+  showToast('Thank-you marked as sent ✓', 'success');
+}
+
+// ── Follow-up Strategy ──
+async function getFollowupStrategy() {
+  const name    = document.getElementById('fu-name').value.trim();
+  const role    = document.getElementById('fu-role').value.trim();
+  const company = document.getElementById('fu-company').value.trim();
+  if (!name) { showToast('Enter the contact name.', 'error'); return; }
+  document.getElementById('followup-result').innerHTML = '<div class="card" style="text-align:center;padding:2rem;color:var(--muted)">⏳ Generating strategy...</div>';
+  try {
+    const res = await fetch('/api/prepare/followup-strategy', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        user_id: parseInt(userId), contact_name: name, contact_role: role,
+        contact_company: company,
+        outcome: document.getElementById('fu-outcome').value,
+        topics_discussed: document.getElementById('fu-topics').value.trim(),
+        target_role: document.getElementById('fu-target').value.trim(),
+      }),
+    });
+    const data = await res.json();
+    document.getElementById('followup-result').innerHTML = `<div class="card"><div class="prose">${formatMarkdown(data.strategy)}</div></div>`;
+    showToast('Follow-up strategy ready! 📨', 'success');
+  } catch(e) { showToast('Error.', 'error'); }
+}
+
+// ── Internship Guide ──
+async function getInternshipGuide() {
+  const role = document.getElementById('ig-role').value.trim();
+  if (!role) { showToast('Enter a role first.', 'error'); return; }
+  document.getElementById('internship-result').innerHTML = '<div class="card" style="text-align:center;padding:2rem;color:var(--muted)">⏳ Generating your guide...</div>';
+  try {
+    const res = await fetch('/api/prepare/internship-guide', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ user_id: parseInt(userId), role, company: document.getElementById('ig-company').value.trim() }),
+    });
+    const data = await res.json();
+    document.getElementById('internship-result').innerHTML = `<div class="card"><div class="prose">${formatMarkdown(data.guide)}</div></div>`;
+    showToast('Internship guide ready! 🏆', 'success');
+  } catch(e) { showToast('Error.', 'error'); }
+}
+
+// ── Helpers ──
+function formatMarkdown(text) {
+  return text.replace(/^### (.+)$/gm,'<h4>$1</h4>').replace(/^## (.+)$/gm,'<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/^- (.+)$/gm,'<li>$1</li>')
+    .replace(/\n\n/g,'</p><p>');
+}
+
+function showToast(msg, type='success') {
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = `toast ${type}`; t.textContent = msg;
+  c.appendChild(t); setTimeout(() => t.remove(), 4000);
+}
+</script>
+</body>
+</html>

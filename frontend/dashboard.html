@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Launchpad</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="/dashboard.html" class="logo">🚀 <span>Launch</span>pad</a>
+  <nav>
+    <a href="/discover.html">🔭 Discover</a>
+    <a href="/build.html">🛠️ Build</a>
+    <a href="/prepare.html">🎯 Prepare</a>
+    <a href="/dashboard.html" class="active">📊 Dashboard</a>
+  </nav>
+  <div class="user-chip">
+    <span id="nav-name">Loading...</span>
+    <a href="/profile.html" style="color:var(--muted);font-size:0.8rem">⚙️</a>
+  </div>
+</nav>
+
+<div class="container" style="padding-top:2rem;padding-bottom:3rem">
+
+  <!-- Header -->
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2rem;flex-wrap:wrap;gap:1rem">
+    <div>
+      <h2>Good <span id="greeting-time">morning</span>, <span id="user-name" style="color:var(--indigo)">there</span> 👋</h2>
+      <p style="margin-top:0.25rem" id="stage-message">Here's where you stand today.</p>
+    </div>
+    <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap">
+      <div class="streak-badge" id="streak-badge">🔥 0 day streak</div>
+      <div id="career-stage-pill"></div>
+    </div>
+  </div>
+
+  <!-- Career Progress Bar -->
+  <div class="card" style="margin-bottom:2rem">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+      <h4>Your Career Progress</h4>
+      <span style="font-size:0.82rem;color:var(--muted)" id="stage-label">Exploring</span>
+    </div>
+    <div style="display:flex;gap:0;margin-bottom:0.75rem" id="stage-steps">
+      <!-- rendered by JS -->
+    </div>
+    <p style="font-size:0.82rem" id="next-action-text"></p>
+  </div>
+
+  <!-- Stats Row -->
+  <div class="grid-4" style="margin-bottom:2rem">
+    <div class="stat-card">
+      <div class="stat-icon">📋</div>
+      <div class="stat-value" id="stat-apps">0</div>
+      <div class="stat-label">Applications sent</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📬</div>
+      <div class="stat-value" id="stat-contacts">0</div>
+      <div class="stat-label">People contacted</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">☕</div>
+      <div class="stat-value" id="stat-chats">0</div>
+      <div class="stat-label">Coffee chats</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🎤</div>
+      <div class="stat-value" id="stat-interviews">0</div>
+      <div class="stat-label">Mock interviews</div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:2rem">
+
+    <!-- Weekly Goals -->
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem">
+        <h4>This Week's Goals</h4>
+        <button class="btn btn-ghost btn-sm" onclick="generateGoals()">✨ Refresh</button>
+      </div>
+      <div id="goals-list" style="display:flex;flex-direction:column;gap:0.5rem">
+        <div style="text-align:center;padding:2rem 0;color:var(--muted);font-size:0.88rem">
+          <div style="font-size:1.5rem;margin-bottom:0.5rem">📋</div>
+          Loading your goals...
+        </div>
+      </div>
+    </div>
+
+    <!-- Milestone Badges -->
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem">
+        <h4>Milestone Badges</h4>
+        <a href="/profile.html" style="font-size:0.82rem;color:var(--muted)">View all →</a>
+      </div>
+      <div id="badges-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem">
+        <!-- rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="card">
+    <h4 style="margin-bottom:1.25rem">Jump back in</h4>
+    <div class="grid-3">
+      <a href="/discover.html" class="feature-card" style="padding:1.25rem">
+        <span style="font-size:1.6rem;display:block;margin-bottom:0.5rem">🔭</span>
+        <div style="font-weight:600;font-size:0.95rem;color:var(--white)">Discover roles</div>
+        <div style="font-size:0.8rem;color:var(--muted);margin-top:0.25rem">Explore & compare careers</div>
+      </a>
+      <a href="/build.html" class="feature-card" style="padding:1.25rem">
+        <span style="font-size:1.6rem;display:block;margin-bottom:0.5rem">🛠️</span>
+        <div style="font-weight:600;font-size:0.95rem;color:var(--white)">Build profile</div>
+        <div style="font-size:0.8rem;color:var(--muted);margin-top:0.25rem">CV, outreach & applications</div>
+      </a>
+      <a href="/prepare.html" class="feature-card" style="padding:1.25rem">
+        <span style="font-size:1.6rem;display:block;margin-bottom:0.5rem">🎯</span>
+        <div style="font-weight:600;font-size:0.95rem;color:var(--white)">Prepare</div>
+        <div style="font-size:0.8rem;color:var(--muted);margin-top:0.25rem">Coffee chats & interviews</div>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+const userId = localStorage.getItem('userId');
+if (!userId) location.href = '/signup.html';
+
+const BADGE_DEFS = [
+  { slug: 'skills_gap_done',       icon: '🧠', name: 'Self-Aware',       desc: 'Completed skills gap' },
+  { slug: 'first_outreach',        icon: '📬', name: 'First Outreach',   desc: 'Sent a cold message' },
+  { slug: 'cv_started',            icon: '📄', name: 'CV Builder',       desc: 'Started your CV' },
+  { slug: 'first_application',     icon: '📋', name: 'First Application',desc: 'Applied to a role' },
+  { slug: 'first_coffee_chat',     icon: '☕', name: 'Coffee Chat',      desc: 'Booked a coffee chat' },
+  { slug: 'first_interview_prep',  icon: '🎤', name: 'Interview Ready',  desc: 'Did a mock interview' },
+  { slug: 'audio_practice',        icon: '🎙️', name: 'Voice Coach',      desc: 'Used audio feedback' },
+  { slug: 'offer_received',        icon: '🏆', name: 'Offer Received',   desc: 'Landed an offer!' },
+];
+
+const STAGE_STEPS = [
+  { key: 'exploring',    label: 'Exploring' },
+  { key: 'building',     label: 'Building' },
+  { key: 'applying',     label: 'Applying' },
+  { key: 'preparing',    label: 'Preparing' },
+  { key: 'offer',        label: 'Offer 🏆' },
+];
+
+window.onload = async () => {
+  const name = localStorage.getItem('userName') || 'there';
+  document.getElementById('user-name').textContent = name.split(' ')[0];
+  document.getElementById('nav-name').textContent = name.split(' ')[0];
+  const h = new Date().getHours();
+  document.getElementById('greeting-time').textContent = h < 12 ? 'morning' : h < 18 ? 'afternoon' : 'evening';
+
+  await loadDashboard();
+  await loadGoals();
+};
+
+async function loadDashboard() {
+  try {
+    const res = await fetch(`/api/gamification/dashboard/${userId}`);
+    const data = await res.json();
+
+    // Streak
+    document.getElementById('streak-badge').textContent = `🔥 ${data.streak.current_streak} day streak`;
+
+    // Stats
+    document.getElementById('stat-apps').textContent       = data.stats.applications;
+    document.getElementById('stat-contacts').textContent   = data.stats.contacts_reached;
+    document.getElementById('stat-chats').textContent      = data.stats.coffee_chats;
+    document.getElementById('stat-interviews').textContent = data.stats.interviews_practiced;
+
+    // Stage
+    const stage = data.career_stage;
+    document.getElementById('stage-label').textContent = stage.label;
+    if (stage.next) {
+      document.getElementById('next-action-text').textContent = `Next: ${stage.next}`;
+    }
+    renderStageBar(stage.level);
+    document.getElementById('career-stage-pill').innerHTML = `<span class="pill pill-indigo">${stage.label}</span>`;
+
+    // Badges
+    const earned = new Set(data.milestones.map(m => m.badge_slug));
+    renderBadges(earned, data.milestones);
+
+    // Show new badge toast
+    if (data.milestones.length > 0) {
+      const last = data.milestones[0];
+      const stored = localStorage.getItem('lastBadge');
+      if (stored !== last.badge_slug) {
+        localStorage.setItem('lastBadge', last.badge_slug);
+        showToast(`🏅 New badge: ${last.badge_name}!`, 'badge');
+      }
+    }
+
+  } catch(e) { console.error(e); }
+}
+
+function renderStageBar(level) {
+  const el = document.getElementById('stage-steps');
+  el.innerHTML = '';
+  STAGE_STEPS.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.style.cssText = `flex:1;padding:0.5rem 0.75rem;border-radius:${i===0?'8px 0 0 8px':i===STAGE_STEPS.length-1?'0 8px 8px 0':'0'};font-size:0.78rem;font-weight:600;text-align:center;`;
+    if (i < level) { div.style.background = 'var(--green-dim)'; div.style.color = 'var(--green)'; }
+    else if (i === level) { div.style.background = 'var(--indigo)'; div.style.color = '#fff'; }
+    else { div.style.background = 'var(--navy-light)'; div.style.color = 'var(--muted)'; }
+    div.textContent = s.label;
+    el.appendChild(div);
+    if (i < STAGE_STEPS.length - 1) {
+      const sep = document.createElement('div');
+      sep.style.cssText = 'width:2px;background:var(--border);flex-shrink:0';
+      el.appendChild(sep);
+    }
+  });
+}
+
+function renderBadges(earned, milestones) {
+  const grid = document.getElementById('badges-grid');
+  grid.innerHTML = '';
+  BADGE_DEFS.slice(0, 6).forEach(b => {
+    const div = document.createElement('div');
+    div.className = `milestone-badge${earned.has(b.slug) ? '' : ' locked'}`;
+    div.innerHTML = `<div class="icon">${b.icon}</div><div class="name">${b.name}</div><div class="desc">${b.desc}</div>`;
+    grid.appendChild(div);
+  });
+}
+
+let weekStart = getWeekStart();
+function getWeekStart() {
+  const d = new Date(); d.setHours(0,0,0,0);
+  d.setDate(d.getDate() - d.getDay() + 1);
+  return d.toISOString().split('T')[0];
+}
+
+async function loadGoals() {
+  let goals = [];
+  try {
+    const res = await fetch(`/api/build/weekly-goals/${userId}/${weekStart}`);
+    const data = await res.json();
+    goals = data.goals || [];
+  } catch(e) {}
+
+  if (goals.length === 0) {
+    await generateGoals();
+    return;
+  }
+  renderGoals(goals);
+}
+
+async function generateGoals() {
+  document.getElementById('goals-list').innerHTML = '<div style="text-align:center;padding:1.5rem 0;color:var(--muted);font-size:0.88rem">✨ Generating your goals...</div>';
+  try {
+    const res = await fetch('/api/build/weekly-goals/generate', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ user_id: parseInt(userId), week_start: weekStart }),
+    });
+    const data = await res.json();
+    renderGoals(data.goals || []);
+  } catch(e) {
+    document.getElementById('goals-list').innerHTML = '<div style="color:var(--muted);font-size:0.85rem;padding:1rem">Could not load goals. Try again later.</div>';
+  }
+}
+
+function renderGoals(goals) {
+  const list = document.getElementById('goals-list');
+  if (goals.length === 0) { list.innerHTML = '<div style="color:var(--muted);font-size:0.85rem;padding:1rem">No goals yet. Click Refresh to generate your first set!</div>'; return; }
+  list.innerHTML = '';
+  goals.forEach((g, i) => {
+    const div = document.createElement('div');
+    div.className = `goal-item${g.completed ? ' done' : ''}`;
+    div.innerHTML = `
+      <input type="checkbox" ${g.completed ? 'checked' : ''} onchange="toggleGoal(${i}, this.checked)" />
+      <div>
+        <div class="goal-text">${g.task}</div>
+        <div class="goal-meta">${g.category} · ~${g.estimated_mins} min</div>
+      </div>`;
+    list.appendChild(div);
+  });
+}
+
+async function toggleGoal(index, completed) {
+  try {
+    const res = await fetch('/api/build/weekly-goals/toggle', {
+      method: 'PATCH',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ user_id: parseInt(userId), week_start: weekStart, goal_index: index, completed }),
+    });
+    const data = await res.json();
+    renderGoals(data.goals);
+    if (completed) showToast('Goal completed! 🎉', 'success');
+  } catch(e) {}
+}
+
+function showToast(msg, type='success') {
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = `toast ${type}`; t.textContent = msg;
+  c.appendChild(t); setTimeout(() => t.remove(), 4000);
+}
+</script>
+</body>
+</html>

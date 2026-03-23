@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome Tour — Launchpad</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <style>
+    .tour-card { max-width: 600px; margin: 0 auto; text-align: center; padding: 3rem 2rem; }
+    .tour-icon { font-size: 4rem; margin-bottom: 1.5rem; display: block; }
+    .tour-dots { display: flex; gap: 0.5rem; justify-content: center; margin: 2rem 0; }
+    .tour-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: all 0.3s; }
+    .tour-dot.active { background: var(--indigo); width: 24px; border-radius: 4px; }
+    .tour-slide { display: none; }
+    .tour-slide.active { display: block; }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <a href="/" class="logo">🚀 <span>Launch</span>pad</a>
+  <button class="btn btn-outline btn-sm" onclick="goToDashboard()">Skip tour →</button>
+</nav>
+
+<div style="padding:2rem 1.5rem;min-height:calc(100vh - 65px);display:flex;flex-direction:column;align-items:center;justify-content:center">
+  <div class="tour-card">
+
+    <div class="tour-slide active" id="slide-0">
+      <span class="tour-icon">🎉</span>
+      <h2>Welcome to Launchpad, <span id="welcome-name" style="color:var(--indigo)">there</span>!</h2>
+      <p style="margin-top:1rem;font-size:1rem">You've taken the first step. Let us show you how Launchpad is going to help you land your first internship.</p>
+    </div>
+
+    <div class="tour-slide" id="slide-1">
+      <span class="tour-icon">🔭</span>
+      <h2 style="color:var(--indigo)">Discover</h2>
+      <p style="margin-top:1rem;font-size:1rem">Not sure what you want? Explore careers, compare roles side by side, simulate a day in the life, and get a personalised year-by-year roadmap for your degree. Start here if you're still exploring.</p>
+    </div>
+
+    <div class="tour-slide" id="slide-2">
+      <span class="tour-icon">🛠️</span>
+      <h2 style="color:var(--gold)">Build</h2>
+      <p style="margin-top:1rem;font-size:1rem">Know what you want? Now build towards it. Get your CV, LinkedIn, and cover letters polished. Track every application and cold email. Auto-apply to relevant roles. Stay accountable with weekly goals.</p>
+    </div>
+
+    <div class="tour-slide" id="slide-3">
+      <span class="tour-icon">🎯</span>
+      <h2 style="color:var(--green)">Prepare</h2>
+      <p style="margin-top:1rem;font-size:1rem">Got a coffee chat or interview? Prepare with tailored advice based on your interviewer's background. Practice with AI mock interviews. Record your answers and get tone and confidence coaching.</p>
+    </div>
+
+    <div class="tour-slide" id="slide-4">
+      <span class="tour-icon">🏆</span>
+      <h2>Track your progress</h2>
+      <p style="margin-top:1rem;font-size:1rem">Earn milestone badges, maintain streaks, and complete weekly micro-tasks. Your dashboard keeps everything in one place so you always know what to do next.</p>
+    </div>
+
+    <div class="tour-slide" id="slide-5">
+      <span class="tour-icon">🚀</span>
+      <h2>You're all set!</h2>
+      <p style="margin-top:1rem;font-size:1rem">Your profile is ready. We've built your personalised starting point. Head to your dashboard to see your first weekly goals and get going.</p>
+    </div>
+
+    <!-- Dots -->
+    <div class="tour-dots" id="tour-dots"></div>
+
+    <!-- Controls -->
+    <div style="display:flex;gap:1rem;justify-content:center">
+      <button class="btn btn-outline" id="btn-back" onclick="prevSlide()" style="display:none">← Back</button>
+      <button class="btn btn-primary btn-lg" id="btn-next" onclick="nextSlide()">Next →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const TOTAL = 6;
+let current = 0;
+
+function renderDots() {
+  const el = document.getElementById('tour-dots');
+  el.innerHTML = '';
+  for (let i = 0; i < TOTAL; i++) {
+    const d = document.createElement('div');
+    d.className = `tour-dot ${i === current ? 'active' : ''}`;
+    el.appendChild(d);
+  }
+}
+
+function showSlide(n) {
+  document.querySelectorAll('.tour-slide').forEach(s => s.classList.remove('active'));
+  document.getElementById(`slide-${n}`).classList.add('active');
+  current = n;
+  renderDots();
+  document.getElementById('btn-back').style.display = n > 0 ? 'inline-flex' : 'none';
+  const btn = document.getElementById('btn-next');
+  if (n === TOTAL - 1) { btn.textContent = 'Go to Dashboard 🚀'; btn.className = 'btn btn-gold btn-lg'; }
+  else { btn.textContent = 'Next →'; btn.className = 'btn btn-primary btn-lg'; }
+}
+
+function nextSlide() {
+  if (current < TOTAL - 1) showSlide(current + 1);
+  else goToDashboard();
+}
+function prevSlide() { if (current > 0) showSlide(current - 1); }
+
+function goToDashboard() {
+  localStorage.setItem('tourDone', '1');
+  location.href = '/dashboard.html';
+}
+
+window.onload = () => {
+  const name = localStorage.getItem('userName');
+  if (name) document.getElementById('welcome-name').textContent = name.split(' ')[0];
+  showSlide(0);
+};
+</script>
+</body>
+</html>

@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-from database import upsert_user, get_user_by_email, get_user_by_id
+from typing import List, Optional
+import database
 
 router = APIRouter(prefix="/api/user", tags=["user"])
 
@@ -11,21 +12,26 @@ class UserProfile(BaseModel):
     degree: str = ""
     university: str = ""
     graduation_year: str = ""
-    skills: list[str] = []
-    experience: list[dict] = []
-    target_roles: list[str] = []
+    year_of_study: str = ""
+    target_sector: str = ""
+    career_stage: str = "exploring"
+    personality_notes: str = ""
+    skills: List[str] = []
+    experience: List = []
+    target_roles: List[str] = []
     location: str = ""
 
 
 @router.post("/save")
 async def save_user(profile: UserProfile):
-    user_id = upsert_user(profile.model_dump())
+    user_id = database.upsert_user(profile.model_dump())
+    database.update_streak(user_id)
     return {"user_id": user_id}
 
 
 @router.get("/by-email/{email}")
 async def get_by_email(email: str):
-    user = get_user_by_email(email)
+    user = database.get_user_by_email(email)
     if not user:
         return {"error": "User not found"}
     return {"user": user}
@@ -33,7 +39,9 @@ async def get_by_email(email: str):
 
 @router.get("/{user_id}")
 async def get_by_id(user_id: int):
-    user = get_user_by_id(user_id)
+    user = database.get_user_by_id(user_id)
     if not user:
         return {"error": "User not found"}
-    return {"user": user}
+    streak = database.get_streak(user_id)
+    milestones = database.get_milestones(user_id)
+    return {"user": user, "streak": streak, "milestones": milestones}

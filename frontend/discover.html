@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Discover — Launchpad</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="/dashboard.html" class="logo">🚀 <span>Launch</span>pad</a>
+  <nav>
+    <a href="/discover.html" class="active">🔭 Discover</a>
+    <a href="/build.html">🛠️ Build</a>
+    <a href="/prepare.html">🎯 Prepare</a>
+    <a href="/dashboard.html">📊 Dashboard</a>
+  </nav>
+  <div class="user-chip"><span id="nav-name">You</span></div>
+</nav>
+
+<div class="container" style="padding-top:2rem;padding-bottom:3rem">
+
+  <div class="page-header-inner">
+    <h2>🔭 Discover</h2>
+    <p>Explore careers, compare roles, simulate the job, and build a personalised roadmap.</p>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs" style="margin-bottom:2rem">
+    <div class="tab active" onclick="switchTab('explore')">Role Explorer</div>
+    <div class="tab" onclick="switchTab('compare')">Compare Roles</div>
+    <div class="tab" onclick="switchTab('simulate')">Job Simulation</div>
+    <div class="tab" onclick="switchTab('gap')">Skills Gap</div>
+    <div class="tab" onclick="switchTab('roadmap')">My Roadmap</div>
+  </div>
+
+  <!-- ── Tab: Role Explorer ── -->
+  <div class="tab-content active" id="tab-explore">
+    <div style="display:flex;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap">
+      <select id="sector-filter" onchange="loadRoles()" style="max-width:220px">
+        <option value="">All sectors</option>
+        <option>Investment Banking</option>
+        <option>Consulting</option>
+        <option>Technology</option>
+        <option>Corporate Finance</option>
+        <option>Asset Management</option>
+        <option>Private Equity</option>
+        <option>Law</option>
+        <option>Marketing</option>
+        <option>Data & Analytics</option>
+      </select>
+      <button class="btn btn-ghost btn-sm" onclick="openGenerateModal()">✨ Generate role profile</button>
+    </div>
+    <div class="grid-3" id="roles-grid">
+      <div class="card" style="text-align:center;padding:3rem;grid-column:1/-1;color:var(--muted)">
+        <div style="font-size:2rem;margin-bottom:0.75rem">🔭</div>
+        <p>Generate a role profile to start exploring. Try "Investment Banking Analyst" or "Strategy Consultant".</p>
+        <button class="btn btn-primary btn-sm" style="margin-top:1rem" onclick="openGenerateModal()">Get started →</button>
+      </div>
+    </div>
+
+    <!-- Role Detail Panel -->
+    <div id="role-detail" class="card hidden" style="margin-top:2rem">
+      <div id="role-detail-content"></div>
+    </div>
+  </div>
+
+  <!-- ── Tab: Compare ── -->
+  <div class="tab-content" id="tab-compare">
+    <div class="card" style="margin-bottom:1.5rem">
+      <h4 style="margin-bottom:1rem">Compare up to 3 roles</h4>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-end">
+        <div class="form-group" style="flex:1;min-width:180px">
+          <label>Role 1</label>
+          <input type="text" id="cmp-1" placeholder="Investment Banking Analyst" />
+        </div>
+        <div class="form-group" style="flex:1;min-width:180px">
+          <label>Role 2</label>
+          <input type="text" id="cmp-2" placeholder="Management Consultant" />
+        </div>
+        <div class="form-group" style="flex:1;min-width:180px">
+          <label>Role 3 (optional)</label>
+          <input type="text" id="cmp-3" placeholder="Corporate Finance Analyst" />
+        </div>
+        <button class="btn btn-primary" onclick="compareRoles()">Compare →</button>
+      </div>
+    </div>
+    <div id="compare-result">
+      <div class="card" style="text-align:center;padding:3rem;color:var(--muted)">
+        <div style="font-size:2rem;margin-bottom:0.75rem">⚖️</div>
+        <p>Enter roles above and hit Compare to see a detailed side-by-side breakdown.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Tab: Job Simulation ── -->
+  <div class="tab-content" id="tab-simulate">
+    <div class="card" style="margin-bottom:1.5rem">
+      <h4 style="margin-bottom:1rem">Set up your simulation</h4>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-end">
+        <div class="form-group" style="flex:2;min-width:200px">
+          <label>Role to simulate</label>
+          <input type="text" id="sim-role" placeholder="e.g. Investment Banking Analyst" />
+        </div>
+        <div class="form-group" style="flex:1;min-width:160px">
+          <label>Company (optional)</label>
+          <input type="text" id="sim-company" placeholder="e.g. Goldman Sachs" />
+        </div>
+        <button class="btn btn-primary" onclick="startSimulation()">Start simulation →</button>
+      </div>
+    </div>
+    <div id="sim-chat-wrap" class="hidden">
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem">
+        <span style="font-size:1.3rem">🎭</span>
+        <div>
+          <div style="font-weight:600;font-size:0.9rem" id="sim-title">Job Simulation</div>
+          <div style="font-size:0.78rem;color:var(--muted)">Claude plays your senior colleague. Experience the real job.</div>
+        </div>
+      </div>
+      <div class="chat-wrap">
+        <div class="chat-messages" id="sim-messages"></div>
+        <div class="chat-input-row">
+          <input type="text" id="sim-input" placeholder="Respond to your colleague..." onkeydown="if(event.key==='Enter')sendSim()" />
+          <button class="btn btn-primary" onclick="sendSim()">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Tab: Skills Gap ── -->
+  <div class="tab-content" id="tab-gap">
+    <div class="card" style="margin-bottom:1.5rem">
+      <h4 style="margin-bottom:0.5rem">Skills Gap Analysis</h4>
+      <p style="font-size:0.88rem;margin-bottom:1rem">Tell us what role you're targeting and we'll analyse your profile against what that role actually requires.</p>
+      <div style="display:flex;gap:1rem;align-items:flex-end;flex-wrap:wrap">
+        <div class="form-group" style="flex:1;min-width:220px">
+          <label>Target Role</label>
+          <input type="text" id="gap-role" placeholder="e.g. Investment Banking Analyst" />
+        </div>
+        <button class="btn btn-primary" onclick="runSkillsGap()">Analyse my profile →</button>
+      </div>
+    </div>
+    <div id="gap-result"></div>
+  </div>
+
+  <!-- ── Tab: Roadmap ── -->
+  <div class="tab-content" id="tab-roadmap">
+    <div class="card" style="margin-bottom:1.5rem">
+      <h4 style="margin-bottom:0.5rem">Your Personalised Roadmap</h4>
+      <p style="font-size:0.88rem;margin-bottom:1rem">Get a semester-by-semester plan tailored to your degree, year, and target role.</p>
+      <div style="display:flex;gap:1rem;align-items:flex-end;flex-wrap:wrap">
+        <div class="form-group" style="flex:1;min-width:220px">
+          <label>Target Role</label>
+          <input type="text" id="roadmap-role" placeholder="e.g. Strategy Consultant" />
+        </div>
+        <button class="btn btn-primary" onclick="generateRoadmap()">Build my roadmap →</button>
+      </div>
+    </div>
+    <div id="roadmap-result"></div>
+  </div>
+
+</div>
+
+<!-- Generate Role Modal -->
+<div class="modal-overlay hidden" id="generate-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Generate Role Profile</h3>
+      <button class="modal-close" onclick="closeGenerateModal()">×</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem">
+      <div class="form-group">
+        <label>Role Title</label>
+        <input type="text" id="gen-title" placeholder="e.g. Investment Banking Analyst" />
+      </div>
+      <div class="form-group">
+        <label>Sector</label>
+        <select id="gen-sector">
+          <option>Investment Banking</option>
+          <option>Consulting</option>
+          <option>Technology</option>
+          <option>Corporate Finance</option>
+          <option>Asset Management</option>
+          <option>Private Equity</option>
+          <option>Law</option>
+          <option>Marketing</option>
+          <option>Data & Analytics</option>
+        </select>
+      </div>
+      <button class="btn btn-primary w-full" onclick="generateRole()">Generate profile ✨</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+const userId = localStorage.getItem('userId');
+if (!userId) location.href = '/signup.html';
+document.getElementById('nav-name').textContent = (localStorage.getItem('userName') || 'You').split(' ')[0];
+
+const simMessages = [];
+
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', ['explore','compare','simulate','gap','roadmap'][i] === name));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById(`tab-${name}`).classList.add('active');
+}
+
+// ── Role Explorer ──
+function openGenerateModal()  { document.getElementById('generate-modal').classList.remove('hidden'); }
+function closeGenerateModal() { document.getElementById('generate-modal').classList.add('hidden'); }
+
+async function generateRole() {
+  const title  = document.getElementById('gen-title').value.trim();
+  const sector = document.getElementById('gen-sector').value;
+  if (!title) { showToast('Enter a role title first.', 'error'); return; }
+  showToast('Generating profile... this may take 10 seconds.', 'success');
+  closeGenerateModal();
+  try {
+    const res = await fetch('/api/discover/role-profile', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ title, sector }),
+    });
+    const data = await res.json();
+    renderRoleCard(data.profile);
+  } catch(e) { showToast('Error generating profile.', 'error'); }
+}
+
+function renderRoleCard(p) {
+  const grid = document.getElementById('roles-grid');
+  // Remove placeholder
+  const placeholder = grid.querySelector('[style*="grid-column"]');
+  if (placeholder) placeholder.remove();
+
+  const card = document.createElement('div');
+  card.className = 'role-card';
+  card.innerHTML = `
+    <div class="role-sector">${p.sector}</div>
+    <h4>${p.title}</h4>
+    <p>${(p.description||'').substring(0,80)}...</p>
+  `;
+  card.onclick = () => showRoleDetail(p);
+  grid.appendChild(card);
+  showRoleDetail(p);
+}
+
+function showRoleDetail(p) {
+  const detail = document.getElementById('role-detail');
+  const skills = (p.skills_required || '').split('|').filter(Boolean);
+  const exits  = (p.exit_opportunities || '').split('|').filter(Boolean);
+  detail.classList.remove('hidden');
+  document.getElementById('role-detail-content').innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem">
+      <div>
+        <div style="font-size:0.78rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em">${p.sector}</div>
+        <h3 style="margin-top:0.3rem">${p.title}</h3>
+      </div>
+      <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+        <button class="btn btn-ghost btn-sm" onclick="document.getElementById('gap-role').value='${p.title}';switchTab('gap')">Skills gap →</button>
+        <button class="btn btn-ghost btn-sm" onclick="document.getElementById('roadmap-role').value='${p.title}';switchTab('roadmap')">Build roadmap →</button>
+        <button class="btn btn-ghost btn-sm" onclick="document.getElementById('sim-role').value='${p.title}';switchTab('simulate')">Simulate job →</button>
+      </div>
+    </div>
+    <p style="margin-bottom:1.5rem">${p.description || ''}</p>
+    <div class="grid-2" style="margin-bottom:1.5rem">
+      <div><div style="font-size:0.78rem;font-weight:600;color:var(--muted);text-transform:uppercase;margin-bottom:0.5rem">HOURS / WEEK</div><div style="font-size:0.95rem;color:var(--white)">${p.typical_hours || 'N/A'}</div></div>
+      <div><div style="font-size:0.78rem;font-weight:600;color:var(--muted);text-transform:uppercase;margin-bottom:0.5rem">AVERAGE SALARY</div><div style="font-size:0.95rem;color:var(--white)">${p.avg_salary || 'N/A'}</div></div>
+    </div>
+    <hr class="divider" />
+    <h4 style="margin-bottom:1rem">A Typical Day</h4>
+    <p style="margin-bottom:1.5rem">${p.day_in_life || ''}</p>
+    <hr class="divider" />
+    <div class="grid-2">
+      <div>
+        <h4 style="margin-bottom:0.75rem">Skills Required</h4>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:0.4rem">
+          ${skills.map(s => `<li style="font-size:0.88rem;color:var(--muted);display:flex;gap:0.5rem"><span style="color:var(--indigo)">▸</span>${s.trim()}</li>`).join('')}
+        </ul>
+      </div>
+      <div>
+        <h4 style="margin-bottom:0.75rem">Exit Opportunities</h4>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:0.4rem">
+          ${exits.map(e => `<li style="font-size:0.88rem;color:var(--muted);display:flex;gap:0.5rem"><span style="color:var(--green)">→</span>${e.trim()}</li>`).join('')}
+        </ul>
+      </div>
+    </div>
+    <hr class="divider" />
+    <h4 style="margin-bottom:0.75rem">Work-Life Balance</h4>
+    <p>${p.work_life_balance || ''}</p>
+  `;
+  detail.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── Compare ──
+async function compareRoles() {
+  const r1 = document.getElementById('cmp-1').value.trim();
+  const r2 = document.getElementById('cmp-2').value.trim();
+  const r3 = document.getElementById('cmp-3').value.trim();
+  const roles = [r1, r2, r3].filter(Boolean);
+  if (roles.length < 2) { showToast('Enter at least 2 roles to compare.', 'error'); return; }
+  document.getElementById('compare-result').innerHTML = '<div class="card" style="text-align:center;padding:2rem;color:var(--muted)">⏳ Comparing roles... this takes about 15 seconds.</div>';
+  try {
+    const res = await fetch('/api/discover/compare', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ roles, user_id: parseInt(userId) }),
+    });
+    const data = await res.json();
+    document.getElementById('compare-result').innerHTML = `<div class="card"><div class="prose">${formatMarkdown(data.comparison)}</div></div>`;
+  } catch(e) { showToast('Error comparing roles.', 'error'); }
+}
+
+// ── Simulation ──
+async function startSimulation() {
+  const role = document.getElementById('sim-role').value.trim();
+  const company = document.getElementById('sim-company').value.trim();
+  if (!role) { showToast('Enter a role first.', 'error'); return; }
+  document.getElementById('sim-title').textContent = `${role} Simulation${company ? ' @ ' + company : ''}`;
+  document.getElementById('sim-chat-wrap').classList.remove('hidden');
+  simMessages.length = 0;
+  addSimMessage('user', `Start simulation for ${role}${company ? ' at ' + company : ''}`);
+  await callSimulate();
+}
+
+async function sendSim() {
+  const input = document.getElementById('sim-input');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  addSimMessage('user', text);
+  await callSimulate();
+}
+
+async function callSimulate() {
+  const role = document.getElementById('sim-role').value.trim();
+  const company = document.getElementById('sim-company').value.trim();
+  showTyping('sim-messages');
+  try {
+    const res = await fetch('/api/discover/simulate', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ messages: simMessages, role, company }),
+    });
+    removeTyping('sim-messages');
+    const data = await res.json();
+    addSimMessage('ai', data.reply);
+    simMessages.push({ role: 'assistant', content: data.reply });
+  } catch(e) { removeTyping('sim-messages'); showToast('Error.', 'error'); }
+}
+
+function addSimMessage(type, text) {
+  if (type === 'user') simMessages.push({ role: 'user', content: text });
+  const msgs = document.getElementById('sim-messages');
+  const div = document.createElement('div');
+  div.className = `msg ${type}`;
+  div.innerHTML = `<div class="msg-avatar">${type==='ai'?'🎭':'👤'}</div><div class="msg-bubble">${text}</div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+// ── Skills Gap ──
+async function runSkillsGap() {
+  const role = document.getElementById('gap-role').value.trim();
+  if (!role) { showToast('Enter a target role first.', 'error'); return; }
+  document.getElementById('gap-result').innerHTML = '<div class="card" style="text-align:center;padding:2rem;color:var(--muted)">⏳ Analysing your profile... about 15 seconds.</div>';
+  try {
+    const res = await fetch('/api/discover/skills-gap', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ user_id: parseInt(userId), target_role: role }),
+    });
+    const data = await res.json();
+    const gap = data.gap_analysis;
+    const gapsHtml = (gap.gaps || []).map(g => `
+      <div style="display:flex;gap:0.75rem;align-items:flex-start;padding:0.75rem;background:var(--navy-light);border-radius:8px;border:1px solid var(--border)">
+        <span class="pill pill-${g.priority === 'high' ? 'red' : g.priority === 'medium' ? 'gold' : 'muted'}" style="flex-shrink:0;margin-top:2px">${g.priority}</span>
+        <div>
+          <div style="font-weight:600;font-size:0.9rem;color:var(--white)">${g.skill}</div>
+          <div style="font-size:0.82rem;color:var(--muted);margin-top:0.2rem">${g.how_to_close}</div>
+        </div>
+      </div>`).join('');
+
+    document.getElementById('gap-result').innerHTML = `
+      <div class="card">
+        <h4 style="margin-bottom:0.75rem">Summary</h4>
+        <p style="margin-bottom:1.5rem">${gap.summary || ''}</p>
+        <div class="grid-2" style="margin-bottom:1.5rem">
+          <div>
+            <h4 style="margin-bottom:0.75rem;color:var(--green)">✓ Your Strengths</h4>
+            <ul style="list-style:none;display:flex;flex-direction:column;gap:0.4rem">
+              ${(gap.strengths||[]).map(s => `<li style="font-size:0.88rem;color:var(--muted)">${s}</li>`).join('')}
+            </ul>
+          </div>
+          <div>
+            <h4 style="margin-bottom:0.75rem;color:var(--indigo-light)">Required Skills</h4>
+            <ul style="list-style:none;display:flex;flex-direction:column;gap:0.4rem">
+              ${(gap.role_requires||[]).map(s => `<li style="font-size:0.88rem;color:var(--muted)">${s}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+        <h4 style="margin-bottom:0.75rem">Gaps to Close</h4>
+        <div style="display:flex;flex-direction:column;gap:0.5rem">${gapsHtml}</div>
+        <hr class="divider"/>
+        <h4 style="margin-bottom:0.75rem">Your Roadmap</h4>
+        <div class="prose">${formatMarkdown(data.roadmap)}</div>
+      </div>`;
+    showToast('Skills gap analysis complete! 🧠', 'success');
+  } catch(e) { showToast('Error running analysis.', 'error'); }
+}
+
+// ── Roadmap ──
+async function generateRoadmap() {
+  const role = document.getElementById('roadmap-role').value.trim();
+  if (!role) { showToast('Enter a target role first.', 'error'); return; }
+  document.getElementById('roadmap-result').innerHTML = '<div class="card" style="text-align:center;padding:2rem;color:var(--muted)">⏳ Building your roadmap... about 15 seconds.</div>';
+  try {
+    const res = await fetch('/api/discover/roadmap', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ user_id: parseInt(userId), target_role: role }),
+    });
+    const data = await res.json();
+    document.getElementById('roadmap-result').innerHTML = `<div class="card"><div class="prose">${formatMarkdown(data.roadmap)}</div></div>`;
+  } catch(e) { showToast('Error generating roadmap.', 'error'); }
+}
+
+// ── Helpers ──
+function showTyping(containerId) {
+  const msgs = document.getElementById(containerId);
+  const div = document.createElement('div');
+  div.className = 'msg ai'; div.id = 'typing-indicator';
+  div.innerHTML = '<div class="msg-avatar">🎭</div><div class="msg-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
+  msgs.appendChild(div); msgs.scrollTop = msgs.scrollHeight;
+}
+function removeTyping(containerId) { document.getElementById('typing-indicator')?.remove(); }
+
+function formatMarkdown(text) {
+  return text
+    .replace(/^### (.+)$/gm, '<h4>$1</h4>')
+    .replace(/^## (.+)$/gm, '<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/^- (.+)$/gm, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
+    .replace(/\n\n/g, '</p><p>')
+    .replace(/^(?!<[hlu])/gm, '');
+}
+
+function showToast(msg, type='success') {
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = `toast ${type}`; t.textContent = msg;
+  c.appendChild(t); setTimeout(() => t.remove(), 4000);
+}
+</script>
+</body>
+</html>

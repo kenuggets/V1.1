@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Build — Launchpad</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="/dashboard.html" class="logo">🚀 <span>Launch</span>pad</a>
+  <nav>
+    <a href="/discover.html">🔭 Discover</a>
+    <a href="/build.html" class="active">🛠️ Build</a>
+    <a href="/prepare.html">🎯 Prepare</a>
+    <a href="/dashboard.html">📊 Dashboard</a>
+  </nav>
+  <div class="user-chip"><span id="nav-name">You</span></div>
+</nav>
+
+<div class="container" style="padding-top:2rem;padding-bottom:3rem">
+
+  <div class="page-header-inner">
+    <h2>🛠️ Build</h2>
+    <p>Polish your CV and LinkedIn, send cold outreach that works, and track every application.</p>
+  </div>
+
+  <div class="tabs" style="margin-bottom:2rem">
+    <div class="tab active" onclick="switchTab('cv')">CV & LinkedIn</div>
+    <div class="tab" onclick="switchTab('outreach')">Cold Outreach</div>
+    <div class="tab" onclick="switchTab('contacts')">Contact Tracker</div>
+    <div class="tab" onclick="switchTab('applications')">Applications</div>
+    <div class="tab" onclick="switchTab('extracurricular')">Extra-Curricular</div>
+  </div>
+
+  <!-- ── CV & LinkedIn ── -->
+  <div class="tab-content active" id="tab-cv">
+    <div class="grid-2" style="margin-bottom:1.5rem">
+      <div>
+        <h4 style="margin-bottom:0.75rem">What can I help you with?</h4>
+        <div style="display:flex;flex-direction:column;gap:0.5rem">
+          <button class="btn btn-ghost w-full" style="justify-content:flex-start" onclick="cvQuickPrompt('Review my CV bullet points and improve them')">📄 Review & improve CV bullets</button>
+          <button class="btn btn-ghost w-full" style="justify-content:flex-start" onclick="cvQuickPrompt('Write a cover letter for me')">✉️ Write a cover letter</button>
+          <button class="btn btn-ghost w-full" style="justify-content:flex-start" onclick="cvQuickPrompt('Optimise my LinkedIn profile — go section by section')">💼 Optimise LinkedIn profile</button>
+          <button class="btn btn-ghost w-full" style="justify-content:flex-start" onclick="cvQuickPrompt('What should my CV structure look like for my target role?')">🗂️ CV structure advice</button>
+        </div>
+      </div>
+      <div style="background:var(--navy-light);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem">
+        <div style="font-size:0.78rem;font-weight:600;color:var(--muted);text-transform:uppercase;margin-bottom:0.75rem">TIPS</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:0.5rem;font-size:0.85rem;color:var(--muted)">
+          <li>💡 Paste your actual CV bullet points for specific feedback</li>
+          <li>💡 Always mention your target role and company for cover letters</li>
+          <li>💡 Ask for LinkedIn headline rewrites — it's the most-viewed section</li>
+        </ul>
+      </div>
+    </div>
+    <div class="chat-wrap">
+      <div class="chat-messages" id="cv-messages">
+        <div class="msg ai"><div class="msg-avatar">📄</div><div class="msg-bubble">Hi! I'm here to help with your CV, cover letters, and LinkedIn. What would you like to work on today?</div></div>
+      </div>
+      <div class="chat-input-row">
+        <input type="text" id="cv-input" placeholder="Paste your CV bullet, ask for a cover letter, ask about LinkedIn..." onkeydown="if(event.key==='Enter')sendCV()" />
+        <button class="btn btn-primary" onclick="sendCV()">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Cold Outreach ── -->
+  <div class="tab-content" id="tab-outreach">
+    <div class="grid-2" style="margin-bottom:1.5rem">
+      <div>
+        <h4 style="margin-bottom:0.75rem">Outreach templates</h4>
+        <div style="display:flex;flex-direction:column;gap:0.5rem">
+          <button class="btn btn-ghost w-full" style="justify-content:flex-start" onclick="outreachTemplate('cold_alumni')">🎓 Cold alumni message</button>
+          <button class="btn btn-ghost w-full" style="justify-content:flex-start" onclick="outreachTemplate('cold_recruiter')">👔 Cold recruiter message</button>
+          <button class="btn btn-ghost w-full" style="justify-content:flex-start" onclick="outreachTemplate('coffee_chat_followup')">☕ Coffee chat follow-up</button>
+          <button class="btn btn-ghost w-full" style="justify-content:flex-start" onclick="outreachTemplate('referral_ask')">🤝 Referral request</button>
+          <button class="btn btn-ghost w-full" style="justify-content:flex-start" onclick="outreachTemplate('thank_you')">💌 Thank-you note</button>
+        </div>
+      </div>
+      <div style="background:var(--navy-light);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem">
+        <div style="font-size:0.78rem;font-weight:600;color:var(--muted);text-transform:uppercase;margin-bottom:0.75rem">GET AI FEEDBACK</div>
+        <p style="font-size:0.85rem;margin-bottom:0.75rem">Paste your draft message below and I'll give you real-time feedback on tone, length, and effectiveness.</p>
+        <textarea id="outreach-draft" placeholder="Paste your draft cold email or LinkedIn message here..." style="min-height:80px"></textarea>
+        <button class="btn btn-primary btn-sm w-full" style="margin-top:0.75rem" onclick="reviewDraft()">Get feedback →</button>
+      </div>
+    </div>
+    <div class="chat-wrap">
+      <div class="chat-messages" id="outreach-messages">
+        <div class="msg ai"><div class="msg-avatar">📬</div><div class="msg-bubble">I'll help you write cold messages that actually get replies. Pick a template above, or paste a draft for feedback.</div></div>
+      </div>
+      <div class="chat-input-row">
+        <input type="text" id="outreach-input" placeholder="Describe who you're reaching out to, or ask for a specific template..." onkeydown="if(event.key==='Enter')sendOutreach()" />
+        <button class="btn btn-primary" onclick="sendOutreach()">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Contact Tracker ── -->
+  <div class="tab-content" id="tab-contacts">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:1rem">
+      <h4>Your Outreach Contacts</h4>
+      <button class="btn btn-primary btn-sm" onclick="openContactModal()">+ Add contact</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Name</th><th>Role & Company</th><th>Contacted</th><th>Status</th><th>Follow Up</th><th>Warmth</th><th></th></tr></thead>
+        <tbody id="contacts-table"></tbody>
+      </table>
+    </div>
+    <div id="contacts-empty" style="text-align:center;padding:3rem;color:var(--muted)" class="hidden">
+      <div style="font-size:2rem;margin-bottom:0.5rem">📬</div>
+      <p>No contacts yet. Add someone you've reached out to.</p>
+    </div>
+  </div>
+
+  <!-- ── Application Tracker ── -->
+  <div class="tab-content" id="tab-applications">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:1rem">
+      <h4>Application Tracker</h4>
+      <button class="btn btn-primary btn-sm" onclick="openAppModal()">+ Add application</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Role</th><th>Company</th><th>Platform</th><th>Stage</th><th>Deadline</th><th>Follow Up</th><th></th></tr></thead>
+        <tbody id="apps-table"></tbody>
+      </table>
+    </div>
+    <div id="apps-empty" style="text-align:center;padding:3rem;color:var(--muted)" class="hidden">
+      <div style="font-size:2rem;margin-bottom:0.5rem">📋</div>
+      <p>No applications tracked yet. Add one above.</p>
+    </div>
+  </div>
+
+  <!-- ── Extra-Curricular ── -->
+  <div class="tab-content" id="tab-extracurricular">
+    <div class="card" style="margin-bottom:1.5rem">
+      <h4 style="margin-bottom:0.5rem">Role-Specific Extra-Curricular Guide</h4>
+      <p style="font-size:0.88rem;margin-bottom:1rem">Tell us your target role and we'll recommend the most impactful activities — competitions, certifications, projects — with guidance on how to approach each one.</p>
+      <div style="display:flex;gap:1rem;align-items:flex-end;flex-wrap:wrap">
+        <div class="form-group" style="flex:1;min-width:220px">
+          <label>Target Role</label>
+          <input type="text" id="ec-role" placeholder="e.g. Management Consultant" />
+        </div>
+        <button class="btn btn-primary" onclick="getECGuide()">Get guide →</button>
+      </div>
+    </div>
+    <div id="ec-result"></div>
+  </div>
+
+</div>
+
+<!-- Add Contact Modal -->
+<div class="modal-overlay hidden" id="contact-modal">
+  <div class="modal">
+    <div class="modal-header"><h3>Add Contact</h3><button class="modal-close" onclick="closeContactModal()">×</button></div>
+    <div style="display:flex;flex-direction:column;gap:1rem">
+      <div class="grid-2">
+        <div class="form-group"><label>Name</label><input type="text" id="c-name" placeholder="Sarah Chen" /></div>
+        <div class="form-group"><label>Their Role</label><input type="text" id="c-role" placeholder="Managing Director" /></div>
+      </div>
+      <div class="form-group"><label>Company</label><input type="text" id="c-company" placeholder="Goldman Sachs" /></div>
+      <div class="form-group"><label>LinkedIn URL (optional)</label><input type="url" id="c-linkedin" placeholder="https://linkedin.com/in/..." /></div>
+      <div class="grid-2">
+        <div class="form-group"><label>Date Contacted</label><input type="date" id="c-date" /></div>
+        <div class="form-group"><label>Follow-Up Date</label><input type="date" id="c-followup" /></div>
+      </div>
+      <div class="form-group"><label>Notes</label><textarea id="c-notes" placeholder="How you know them, what you discussed..." style="min-height:60px"></textarea></div>
+      <button class="btn btn-primary w-full" onclick="addContact()">Save contact</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Application Modal -->
+<div class="modal-overlay hidden" id="app-modal">
+  <div class="modal">
+    <div class="modal-header"><h3>Add Application</h3><button class="modal-close" onclick="closeAppModal()">×</button></div>
+    <div style="display:flex;flex-direction:column;gap:1rem">
+      <div class="grid-2">
+        <div class="form-group"><label>Role Title</label><input type="text" id="a-title" placeholder="Investment Banking Analyst" /></div>
+        <div class="form-group"><label>Company</label><input type="text" id="a-company" placeholder="Goldman Sachs" /></div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group"><label>Platform</label>
+          <select id="a-platform"><option value="manual">Manual</option><option value="linkedin">LinkedIn</option><option value="indeed">Indeed</option><option value="handshake">Handshake</option><option value="company_site">Company site</option></select>
+        </div>
+        <div class="form-group"><label>Deadline</label><input type="date" id="a-deadline" /></div>
+      </div>
+      <div class="form-group"><label>URL (optional)</label><input type="url" id="a-url" placeholder="Link to job posting" /></div>
+      <button class="btn btn-primary w-full" onclick="addApplication()">Save application</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+const userId = localStorage.getItem('userId');
+if (!userId) location.href = '/signup.html';
+document.getElementById('nav-name').textContent = (localStorage.getItem('userName') || 'You').split(' ')[0];
+
+const cvMessages = [{ role: 'assistant', content: "Hi! I'm here to help with your CV, cover letters, and LinkedIn. What would you like to work on today?" }];
+const outreachMessages = [{ role: 'assistant', content: "I'll help you write cold messages that actually get replies. Pick a template above, or paste a draft for feedback." }];
+
+function switchTab(name) {
+  const tabs = ['cv','outreach','contacts','applications','extracurricular'];
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', tabs[i] === name));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById(`tab-${name}`).classList.add('active');
+  if (name === 'contacts') loadContacts();
+  if (name === 'applications') loadApplications();
+}
+
+// ── CV Chat ──
+function cvQuickPrompt(text) {
+  document.getElementById('cv-input').value = text;
+  sendCV();
+}
+
+async function sendCV() {
+  const input = document.getElementById('cv-input');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  cvMessages.push({ role: 'user', content: text });
+  addMsg('cv-messages', 'user', text, '👤');
+  showTyping('cv-messages', '📄');
+  try {
+    const res = await fetch('/api/build/cv-chat', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ messages: cvMessages, user_id: parseInt(userId) }),
+    });
+    removeTyping('cv-messages');
+    const data = await res.json();
+    cvMessages.push({ role: 'assistant', content: data.reply });
+    addMsg('cv-messages', 'ai', data.reply, '📄');
+  } catch(e) { removeTyping('cv-messages'); showToast('Error.', 'error'); }
+}
+
+// ── Outreach Chat ──
+async function outreachTemplate(scenario) {
+  const prompt = `Give me a template for a ${scenario.replace(/_/g,' ')} message for my target role.`;
+  document.getElementById('outreach-input').value = '';
+  outreachMessages.push({ role: 'user', content: prompt });
+  addMsg('outreach-messages', 'user', `Template: ${scenario.replace(/_/g,' ')}`, '👤');
+  showTyping('outreach-messages', '📬');
+  await callOutreach();
+}
+
+async function reviewDraft() {
+  const draft = document.getElementById('outreach-draft').value.trim();
+  if (!draft) { showToast('Paste your draft first.', 'error'); return; }
+  const prompt = `Please review and give feedback on this outreach message:\n\n${draft}`;
+  outreachMessages.push({ role: 'user', content: prompt });
+  addMsg('outreach-messages', 'user', 'Review my draft message →', '👤');
+  showTyping('outreach-messages', '📬');
+  await callOutreach();
+}
+
+async function sendOutreach() {
+  const input = document.getElementById('outreach-input');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  outreachMessages.push({ role: 'user', content: text });
+  addMsg('outreach-messages', 'user', text, '👤');
+  showTyping('outreach-messages', '📬');
+  await callOutreach();
+}
+
+async function callOutreach() {
+  try {
+    const res = await fetch('/api/build/outreach-chat', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ messages: outreachMessages, user_id: parseInt(userId) }),
+    });
+    removeTyping('outreach-messages');
+    const data = await res.json();
+    outreachMessages.push({ role: 'assistant', content: data.reply });
+    addMsg('outreach-messages', 'ai', data.reply, '📬');
+  } catch(e) { removeTyping('outreach-messages'); showToast('Error.', 'error'); }
+}
+
+// ── Contact Tracker ──
+function openContactModal()  { document.getElementById('c-date').value = new Date().toISOString().split('T')[0]; document.getElementById('contact-modal').classList.remove('hidden'); }
+function closeContactModal() { document.getElementById('contact-modal').classList.add('hidden'); }
+
+async function addContact() {
+  const name = document.getElementById('c-name').value.trim();
+  if (!name) { showToast('Name is required.', 'error'); return; }
+  try {
+    await fetch(`/api/build/contacts/${userId}`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        name, role: document.getElementById('c-role').value.trim(),
+        company: document.getElementById('c-company').value.trim(),
+        linkedin_url: document.getElementById('c-linkedin').value.trim(),
+        date_contacted: document.getElementById('c-date').value,
+        follow_up_date: document.getElementById('c-followup').value,
+        notes: document.getElementById('c-notes').value.trim(),
+      }),
+    });
+    closeContactModal();
+    loadContacts();
+    showToast('Contact added! 📬', 'success');
+  } catch(e) { showToast('Error saving.', 'error'); }
+}
+
+async function loadContacts() {
+  const res = await fetch(`/api/build/contacts/${userId}`);
+  const data = await res.json();
+  const tbody = document.getElementById('contacts-table');
+  const empty = document.getElementById('contacts-empty');
+  if (!data.contacts || data.contacts.length === 0) { tbody.innerHTML = ''; empty.classList.remove('hidden'); return; }
+  empty.classList.add('hidden');
+  const statusPill = { replied: 'green', no_reply: 'muted', bounced: 'red' };
+  const warmPill   = { warm: 'green', lukewarm: 'gold', cold: 'muted' };
+  tbody.innerHTML = data.contacts.map(c => `
+    <tr>
+      <td style="font-weight:600;color:var(--white)">${c.name}</td>
+      <td><div style="font-size:0.88rem">${c.role || '—'}</div><div style="font-size:0.78rem;color:var(--muted)">${c.company || ''}</div></td>
+      <td style="color:var(--muted);font-size:0.85rem">${c.date_contacted || '—'}</td>
+      <td><span class="pill pill-${statusPill[c.reply_status]||'muted'}">${(c.reply_status||'').replace('_',' ')}</span></td>
+      <td style="color:var(--muted);font-size:0.85rem">${c.follow_up_date || '—'}</td>
+      <td><span class="pill pill-${warmPill[c.lead_warmth]||'muted'}">${c.lead_warmth||'cold'}</span></td>
+      <td><button class="btn btn-outline btn-sm" onclick="markReplied(${c.id})">Replied</button></td>
+    </tr>`).join('');
+}
+
+async function markReplied(id) {
+  await fetch(`/api/build/contacts/update/${id}`, {
+    method:'PATCH', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ reply_status: 'replied', lead_warmth: 'warm' }),
+  });
+  loadContacts();
+  showToast('Contact updated ✓', 'success');
+}
+
+// ── Application Tracker ──
+function openAppModal()  { document.getElementById('app-modal').classList.remove('hidden'); }
+function closeAppModal() { document.getElementById('app-modal').classList.add('hidden'); }
+
+async function addApplication() {
+  const title = document.getElementById('a-title').value.trim();
+  const company = document.getElementById('a-company').value.trim();
+  if (!title || !company) { showToast('Role and company required.', 'error'); return; }
+  try {
+    await fetch(`/api/build/applications/${userId}`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        job_title: title, company,
+        platform: document.getElementById('a-platform').value,
+        deadline: document.getElementById('a-deadline').value,
+        url: document.getElementById('a-url').value.trim(),
+      }),
+    });
+    closeAppModal();
+    loadApplications();
+    showToast('Application tracked! 📋', 'success');
+  } catch(e) { showToast('Error saving.', 'error'); }
+}
+
+async function loadApplications() {
+  const res = await fetch(`/api/build/applications/${userId}`);
+  const data = await res.json();
+  const tbody = document.getElementById('apps-table');
+  const empty = document.getElementById('apps-empty');
+  if (!data.applications || data.applications.length === 0) { tbody.innerHTML = ''; empty.classList.remove('hidden'); return; }
+  empty.classList.add('hidden');
+  const stagePill = { applied: 'indigo', screening: 'gold', interview: 'green', offer: 'green', rejected: 'red' };
+  tbody.innerHTML = data.applications.map(a => `
+    <tr>
+      <td style="font-weight:600;color:var(--white)">${a.job_title}</td>
+      <td>${a.company}</td>
+      <td><span class="pill pill-muted">${a.platform}</span></td>
+      <td>
+        <select onchange="updateAppStage(${a.id}, this.value)" style="background:transparent;border:none;color:var(--muted);font-size:0.82rem;padding:0;width:auto">
+          ${['applied','screening','interview','offer','rejected'].map(s => `<option value="${s}" ${s===a.stage?'selected':''}>${s}</option>`).join('')}
+        </select>
+      </td>
+      <td style="color:var(--muted);font-size:0.85rem">${a.deadline || '—'}</td>
+      <td style="color:var(--muted);font-size:0.85rem">${a.follow_up_date || '—'}</td>
+      <td><button class="btn btn-outline btn-sm" onclick="navigator.clipboard.writeText('${a.url||''}')">Copy URL</button></td>
+    </tr>`).join('');
+}
+
+async function updateAppStage(id, stage) {
+  await fetch(`/api/build/applications/update/${id}`, {
+    method:'PATCH', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ stage, status: stage }),
+  });
+  showToast(`Stage updated to ${stage}`, 'success');
+}
+
+// ── Extra-Curricular ──
+async function getECGuide() {
+  const role = document.getElementById('ec-role').value.trim();
+  if (!role) { showToast('Enter a target role first.', 'error'); return; }
+  document.getElementById('ec-result').innerHTML = '<div class="card" style="text-align:center;padding:2rem;color:var(--muted)">⏳ Building your guide... about 15 seconds.</div>';
+  try {
+    const res = await fetch('/api/build/extracurricular', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ user_id: parseInt(userId), target_role: role }),
+    });
+    const data = await res.json();
+    document.getElementById('ec-result').innerHTML = `<div class="card"><div class="prose">${formatMarkdown(data.guide)}</div></div>`;
+  } catch(e) { showToast('Error.', 'error'); }
+}
+
+// ── Helpers ──
+function addMsg(containerId, type, text, avatar) {
+  const msgs = document.getElementById(containerId);
+  const div = document.createElement('div');
+  div.className = `msg ${type}`;
+  div.innerHTML = `<div class="msg-avatar">${avatar}</div><div class="msg-bubble">${text}</div>`;
+  msgs.appendChild(div); msgs.scrollTop = msgs.scrollHeight;
+}
+function showTyping(containerId, avatar) {
+  const msgs = document.getElementById(containerId);
+  const div = document.createElement('div');
+  div.className = 'msg ai'; div.id = 'typing-' + containerId;
+  div.innerHTML = `<div class="msg-avatar">${avatar}</div><div class="msg-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+  msgs.appendChild(div); msgs.scrollTop = msgs.scrollHeight;
+}
+function removeTyping(containerId) { document.getElementById('typing-' + containerId)?.remove(); }
+
+function formatMarkdown(text) {
+  return text.replace(/^### (.+)$/gm,'<h4>$1</h4>').replace(/^## (.+)$/gm,'<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/^- (.+)$/gm,'<li>$1</li>')
+    .replace(/\n\n/g,'</p><p>');
+}
+
+function showToast(msg, type='success') {
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = `toast ${type}`; t.textContent = msg;
+  c.appendChild(t); setTimeout(() => t.remove(), 4000);
+}
+</script>
+</body>
+</html>

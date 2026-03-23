@@ -3,217 +3,217 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Career Assistant</title>
+  <title>Launchpad — Your Career Starts Here</title>
   <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
 
-<header class="page-header">
-  <span class="logo">&#127775; CareerAI</span>
-  <nav>
-    <a href="/cv.html">CV &amp; Cover Letter</a>
-    <a href="/application.html">Apply</a>
-    <a href="/email.html">Cold Email</a>
-    <a href="/interview.html">Interview Prep</a>
-  </nav>
-</header>
-
-<!-- Onboarding (shown until profile saved) -->
-<div id="onboarding" class="onboarding-wrap" style="display:none">
-  <h2>Welcome to CareerAI</h2>
-  <p class="sub">Set up your profile once — every bot uses it to personalise advice for you.</p>
-
-  <div class="step-indicator">
-    <div class="step-dot active" id="dot-0"></div>
-    <div class="step-dot" id="dot-1"></div>
-    <div class="step-dot" id="dot-2"></div>
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="logo">🚀 <span>Launch</span>pad</div>
+  <div style="display:flex;align-items:center;gap:0.75rem">
+    <a href="/signup.html" class="btn btn-outline btn-sm">Log in</a>
+    <a href="/signup.html" class="btn btn-primary btn-sm">Get started free</a>
   </div>
+</nav>
 
-  <!-- Step 0 -->
-  <div id="step-0">
-    <div class="form-group">
-      <label>Full Name</label>
-      <input type="text" id="name" placeholder="Jane Smith" />
-    </div>
-    <div class="form-group">
-      <label>Email</label>
-      <input type="email" id="email" placeholder="jane@university.ac.uk" />
-    </div>
-    <div class="form-group">
-      <label>Location (City, Country)</label>
-      <input type="text" id="location" placeholder="London, UK" />
-    </div>
-    <button class="btn btn-primary" onclick="nextStep(0)">Next &rarr;</button>
+<!-- Hero -->
+<section class="hero">
+  <div style="display:inline-flex;align-items:center;gap:0.4rem;background:var(--indigo-dim);border:1px solid var(--indigo);color:var(--indigo-light);padding:0.3rem 1rem;border-radius:20px;font-size:0.82rem;font-weight:600;margin-bottom:1.5rem">
+    ✦ Built for university students targeting their first internship
   </div>
-
-  <!-- Step 1 -->
-  <div id="step-1" style="display:none">
-    <div class="form-group">
-      <label>Degree</label>
-      <input type="text" id="degree" placeholder="BSc Computer Science" />
+  <h1>Land your first<br><span>internship</span> with AI</h1>
+  <p>From "I have no idea what I want" to "I got the offer" — Launchpad guides you through every step of your career journey with personalised AI.</p>
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+    <a href="/signup.html" class="btn btn-gold btn-lg">Start for free →</a>
+    <a href="#how" class="btn btn-outline btn-lg">See how it works</a>
+  </div>
+  <div style="margin-top:3rem;display:flex;justify-content:center;gap:2.5rem;flex-wrap:wrap">
+    <div style="text-align:center">
+      <div style="font-size:1.6rem;font-weight:800;color:var(--white)">4</div>
+      <div style="font-size:0.8rem;color:var(--muted)">Career Modules</div>
     </div>
-    <div class="form-group">
-      <label>University</label>
-      <input type="text" id="university" placeholder="University College London" />
+    <div style="text-align:center">
+      <div style="font-size:1.6rem;font-weight:800;color:var(--white)">AI</div>
+      <div style="font-size:0.8rem;color:var(--muted)">Personalised Advice</div>
     </div>
-    <div class="form-group">
-      <label>Graduation Year</label>
-      <input type="text" id="grad-year" placeholder="2026" />
-    </div>
-    <div class="form-group">
-      <label>Skills (press Enter to add)</label>
-      <div class="tag-input" id="skills-tags"></div>
-      <input type="text" id="skills-input" placeholder="Python, Excel, Leadership..." onkeydown="addTag(event,'skills')" style="margin-top:0.5rem" />
-    </div>
-    <div style="display:flex;gap:0.5rem">
-      <button class="btn btn-secondary" onclick="prevStep(1)">&larr; Back</button>
-      <button class="btn btn-primary" onclick="nextStep(1)">Next &rarr;</button>
+    <div style="text-align:center">
+      <div style="font-size:1.6rem;font-weight:800;color:var(--white)">100%</div>
+      <div style="font-size:0.8rem;color:var(--muted)">Built for Students</div>
     </div>
   </div>
+</section>
 
-  <!-- Step 2 -->
-  <div id="step-2" style="display:none">
-    <div class="form-group">
-      <label>Target Roles (press Enter to add)</label>
-      <div class="tag-input" id="roles-tags"></div>
-      <input type="text" id="roles-input" placeholder="Investment Banking Analyst, Software Engineer..." onkeydown="addTag(event,'roles')" style="margin-top:0.5rem" />
+<!-- Journey Overview -->
+<section class="section" id="how">
+  <div class="container">
+    <div class="section-header text-center">
+      <h2>Your complete career journey, <span style="color:var(--indigo)">in one place</span></h2>
+      <p>Most students waste their first two years not knowing what to do. Launchpad fixes that.</p>
     </div>
-    <div class="form-group">
-      <label>Experience (brief summary)</label>
-      <textarea id="experience" placeholder="Treasurer of Finance Society (2023-24); Data Analysis intern at Acme Corp (Summer 2024)..."></textarea>
+
+    <div class="grid-4" style="margin-top:2.5rem">
+      <div class="feature-card" onclick="location.href='/signup.html'">
+        <span class="fc-icon">🔭</span>
+        <h3>Discover</h3>
+        <p>Explore roles, compare careers, simulate a day in the life, and build a personalised roadmap.</p>
+        <div style="margin-top:1.2rem;font-size:0.8rem;color:var(--indigo-light);font-weight:600">Explore roles →</div>
+      </div>
+      <div class="feature-card" onclick="location.href='/signup.html'">
+        <span class="fc-icon">🛠️</span>
+        <h3>Build</h3>
+        <p>Craft your CV, LinkedIn, and cover letters. Track applications and send cold outreach that gets replies.</p>
+        <div style="margin-top:1.2rem;font-size:0.8rem;color:var(--indigo-light);font-weight:600">Build profile →</div>
+      </div>
+      <div class="feature-card" onclick="location.href='/signup.html'">
+        <span class="fc-icon">🎯</span>
+        <h3>Prepare</h3>
+        <p>Get ready for coffee chats and interviews with tailored coaching, mock sessions, and audio feedback.</p>
+        <div style="margin-top:1.2rem;font-size:0.8rem;color:var(--indigo-light);font-weight:600">Start prep →</div>
+      </div>
+      <div class="feature-card" onclick="location.href='/signup.html'">
+        <span class="fc-icon">🏆</span>
+        <h3>Succeed</h3>
+        <p>Track your progress, earn milestone badges, hit weekly goals, and stay accountable to your ambitions.</p>
+        <div style="margin-top:1.2rem;font-size:0.8rem;color:var(--indigo-light);font-weight:600">Stay on track →</div>
+      </div>
     </div>
-    <div style="display:flex;gap:0.5rem">
-      <button class="btn btn-secondary" onclick="prevStep(2)">&larr; Back</button>
-      <button class="btn btn-primary" onclick="saveProfile()">Save &amp; Get Started</button>
+  </div>
+</section>
+
+<!-- Features Detail -->
+<section class="section" style="background:var(--navy-light);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="container">
+    <div class="grid-2" style="gap:4rem;align-items:center">
+      <div>
+        <div style="font-size:0.8rem;font-weight:600;color:var(--indigo-light);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem">Discover</div>
+        <h2>Stop guessing. <span style="color:var(--indigo)">Explore with clarity.</span></h2>
+        <p style="margin-top:1rem">Compare Investment Banking vs. Consulting vs. Corporate Finance side by side. Hear from real professionals. Simulate what a typical day actually feels like — hours, pressure, and all.</p>
+        <ul style="margin-top:1.5rem;display:flex;flex-direction:column;gap:0.75rem;list-style:none">
+          <li style="display:flex;gap:0.75rem;align-items:flex-start"><span style="color:var(--green);font-size:1.1rem;flex-shrink:0">✓</span><span style="color:var(--muted);font-size:0.9rem">Role comparison tool (hours, pay, exit opps, culture)</span></li>
+          <li style="display:flex;gap:0.75rem;align-items:flex-start"><span style="color:var(--green);font-size:1.1rem;flex-shrink:0">✓</span><span style="color:var(--muted);font-size:0.9rem">AI job simulation — live a day in the role</span></li>
+          <li style="display:flex;gap:0.75rem;align-items:flex-start"><span style="color:var(--green);font-size:1.1rem;flex-shrink:0">✓</span><span style="color:var(--muted);font-size:0.9rem">Personalised skills gap analysis</span></li>
+          <li style="display:flex;gap:0.75rem;align-items:flex-start"><span style="color:var(--green);font-size:1.1rem;flex-shrink:0">✓</span><span style="color:var(--muted);font-size:0.9rem">Year-by-year roadmap for your degree</span></li>
+        </ul>
+      </div>
+      <div class="card" style="padding:2rem">
+        <div style="font-size:0.78rem;color:var(--muted);margin-bottom:1rem;font-weight:500">ROLE COMPARISON PREVIEW</div>
+        <div style="display:flex;gap:1rem">
+          <div style="flex:1;background:var(--navy-light);border-radius:10px;padding:1rem;border:1px solid var(--indigo)">
+            <div style="font-weight:700;font-size:0.9rem;color:var(--white);margin-bottom:0.75rem">Investment Banking</div>
+            <div style="font-size:0.78rem;color:var(--muted);display:flex;flex-direction:column;gap:0.4rem">
+              <div>⏰ 70–90 hrs/week</div>
+              <div>💰 £55–65k base</div>
+              <div>📈 PE, VC, Corp Dev</div>
+              <div>😰 Demanding culture</div>
+            </div>
+          </div>
+          <div style="flex:1;background:var(--navy-light);border-radius:10px;padding:1rem;border:1px solid var(--border)">
+            <div style="font-weight:700;font-size:0.9rem;color:var(--white);margin-bottom:0.75rem">Consulting</div>
+            <div style="font-size:0.78rem;color:var(--muted);display:flex;flex-direction:column;gap:0.4rem">
+              <div>⏰ 55–70 hrs/week</div>
+              <div>💰 £45–55k base</div>
+              <div>📈 Industry, PE, Ops</div>
+              <div>✈️ Travel-heavy</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- Landing (shown after profile saved) -->
-<div id="landing" style="display:none">
-  <div class="hero">
-    <h1>Your AI <span>Career Assistant</span></h1>
-    <p>Four specialised bots to help you build your CV, apply to internships, write cold emails, and ace your interviews.</p>
+<section class="section">
+  <div class="container">
+    <div class="grid-2" style="gap:4rem;align-items:center">
+      <div class="card" style="padding:2rem">
+        <div style="font-size:0.78rem;color:var(--muted);margin-bottom:1rem;font-weight:500">OUTREACH TRACKER</div>
+        <div style="display:flex;flex-direction:column;gap:0.6rem">
+          <div style="display:flex;justify-content:space-between;align-items:center;background:var(--navy-light);padding:0.7rem 0.9rem;border-radius:8px;border:1px solid var(--border)">
+            <div><div style="font-size:0.85rem;font-weight:600;color:var(--white)">Sarah Chen</div><div style="font-size:0.75rem;color:var(--muted)">Goldman Sachs · MD</div></div>
+            <span class="pill pill-green">Replied ✓</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;background:var(--navy-light);padding:0.7rem 0.9rem;border-radius:8px;border:1px solid var(--border)">
+            <div><div style="font-size:0.85rem;font-weight:600;color:var(--white)">James Liu</div><div style="font-size:0.75rem;color:var(--muted)">McKinsey · Associate</div></div>
+            <span class="pill pill-gold">Follow up in 3d</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;background:var(--navy-light);padding:0.7rem 0.9rem;border-radius:8px;border:1px solid var(--border)">
+            <div><div style="font-size:0.85rem;font-weight:600;color:var(--white)">Priya Patel</div><div style="font-size:0.75rem;color:var(--muted)">Barclays · Analyst</div></div>
+            <span class="pill pill-muted">Sent today</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:0.8rem;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem">Build</div>
+        <h2>Your CV, outreach, and applications — <span style="color:var(--gold)">all tracked.</span></h2>
+        <p style="margin-top:1rem">Stop losing track of who you've messaged, when to follow up, and which applications are pending. Build your profile with AI-optimised CVs and cold emails that actually work.</p>
+        <ul style="margin-top:1.5rem;display:flex;flex-direction:column;gap:0.75rem;list-style:none">
+          <li style="display:flex;gap:0.75rem;align-items:flex-start"><span style="color:var(--gold);font-size:1.1rem;flex-shrink:0">✓</span><span style="color:var(--muted);font-size:0.9rem">Industry-specific CV templates + AI bullet feedback</span></li>
+          <li style="display:flex;gap:0.75rem;align-items:flex-start"><span style="color:var(--gold);font-size:1.1rem;flex-shrink:0">✓</span><span style="color:var(--muted);font-size:0.9rem">Cold email templates by scenario with live AI coaching</span></li>
+          <li style="display:flex;gap:0.75rem;align-items:flex-start"><span style="color:var(--gold);font-size:1.1rem;flex-shrink:0">✓</span><span style="color:var(--muted);font-size:0.9rem">Outreach tracker (replies, warmth, follow-up dates)</span></li>
+          <li style="display:flex;gap:0.75rem;align-items:flex-start"><span style="color:var(--gold);font-size:1.1rem;flex-shrink:0">✓</span><span style="color:var(--muted);font-size:0.9rem">Auto-apply to LinkedIn, Indeed, Handshake</span></li>
+        </ul>
+      </div>
+    </div>
   </div>
+</section>
 
-  <div class="bot-grid">
-    <a href="/cv.html" class="bot-card">
-      <div class="icon">&#128196;</div>
-      <h3>CV &amp; Cover Letter</h3>
-      <p>Get tailored advice and a personalised cover letter for any role.</p>
-    </a>
-    <a href="/application.html" class="bot-card">
-      <div class="icon">&#128640;</div>
-      <h3>Auto Apply</h3>
-      <p>Search LinkedIn, Indeed, Handshake and apply — all in one click.</p>
-    </a>
-    <a href="/email.html" class="bot-card">
-      <div class="icon">&#9993;&#65039;</div>
-      <h3>Cold Email</h3>
-      <p>Write compelling outreach emails that actually get replies.</p>
-    </a>
-    <a href="/interview.html" class="bot-card">
-      <div class="icon">&#127908;</div>
-      <h3>Interview Prep</h3>
-      <p>Practice with role-specific questions and get scored on every answer.</p>
-    </a>
+<section class="section" style="background:var(--navy-light);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="container">
+    <div class="grid-2" style="gap:4rem;align-items:center">
+      <div>
+        <div style="font-size:0.8rem;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem">Prepare</div>
+        <h2>Walk into every coffee chat <span style="color:var(--green)">prepared.</span></h2>
+        <p style="margin-top:1rem">Paste your interviewer's LinkedIn profile and get a tailored guide: what to ask, what not to say, how to end well, and how to turn one chat into a referral.</p>
+        <ul style="margin-top:1.5rem;display:flex;flex-direction:column;gap:0.75rem;list-style:none">
+          <li style="display:flex;gap:0.75rem;align-items:flex-start"><span style="color:var(--green);font-size:1.1rem;flex-shrink:0">✓</span><span style="color:var(--muted);font-size:0.9rem">Tailored coffee chat prep from interviewer's bio</span></li>
+          <li style="display:flex;gap:0.75rem;align-items:flex-start"><span style="color:var(--green);font-size:1.1rem;flex-shrink:0">✓</span><span style="color:var(--muted);font-size:0.9rem">Mock interviews: behavioural, case, technical, AC</span></li>
+          <li style="display:flex;gap:0.75rem;align-items:flex-start"><span style="color:var(--green);font-size:1.1rem;flex-shrink:0">✓</span><span style="color:var(--muted);font-size:0.9rem">Audio recording + AI tone & confidence coaching</span></li>
+          <li style="display:flex;gap:0.75rem;align-items:flex-start"><span style="color:var(--green);font-size:1.1rem;flex-shrink:0">✓</span><span style="color:var(--muted);font-size:0.9rem">Follow-up strategy so you never lose momentum</span></li>
+        </ul>
+      </div>
+      <div class="card" style="padding:2rem">
+        <div style="font-size:0.78rem;color:var(--muted);margin-bottom:1rem;font-weight:500">INTERVIEW SCORE PREVIEW</div>
+        <div style="display:flex;flex-direction:column;gap:0.85rem">
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-bottom:0.4rem"><span style="color:var(--muted)">Content</span><span style="color:var(--white);font-weight:600">4/5</span></div>
+            <div class="progress-wrap"><div class="progress-fill" style="width:80%"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-bottom:0.4rem"><span style="color:var(--muted)">Structure</span><span style="color:var(--white);font-weight:600">3/5</span></div>
+            <div class="progress-wrap"><div class="progress-fill" style="width:60%;background:linear-gradient(90deg,var(--gold),var(--gold-light))"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-bottom:0.4rem"><span style="color:var(--muted)">Conciseness</span><span style="color:var(--white);font-weight:600">5/5</span></div>
+            <div class="progress-wrap"><div class="progress-fill" style="width:100%;background:linear-gradient(90deg,var(--green),#34d399)"></div></div>
+          </div>
+        </div>
+        <div style="margin-top:1.25rem;background:var(--navy-light);border-radius:8px;padding:0.85rem;border:1px solid var(--border);font-size:0.82rem;color:var(--muted)">
+          💬 "Strong answer with good quantification. Work on framing the challenge before diving into your action — give the interviewer more context upfront."
+        </div>
+      </div>
+    </div>
   </div>
+</section>
 
-  <div style="text-align:center;padding-bottom:2rem">
-    <button class="btn btn-secondary btn-sm" onclick="resetProfile()">&#9998; Edit profile</button>
+<!-- CTA -->
+<section class="section">
+  <div class="container">
+    <div style="text-align:center;max-width:600px;margin:0 auto;padding:4rem 2rem;background:var(--navy-card);border-radius:24px;border:1px solid var(--border);position:relative;overflow:hidden">
+      <div style="position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:400px;height:400px;background:radial-gradient(circle,rgba(99,102,241,0.15) 0%,transparent 70%);pointer-events:none"></div>
+      <div style="font-size:2.5rem;margin-bottom:0.75rem">🚀</div>
+      <h2>Your internship journey<br>starts today.</h2>
+      <p style="margin:1rem 0 2rem">Sign up free, tell us about yourself, and we'll build a personalised career plan in minutes.</p>
+      <a href="/signup.html" class="btn btn-gold btn-lg">Get started free →</a>
+      <div style="margin-top:1.5rem;font-size:0.8rem;color:var(--muted)">Free to use · No credit card required</div>
+    </div>
   </div>
-</div>
+</section>
 
-<script>
-  const skills = [], roles = [];
+<footer style="border-top:1px solid var(--border);padding:2rem 1.5rem;text-align:center">
+  <div style="font-size:1.1rem;font-weight:800;margin-bottom:0.5rem">🚀 <span style="color:var(--indigo)">Launch</span>pad</div>
+  <div style="font-size:0.82rem;color:var(--muted)">Helping university students land their first internship with AI.</div>
+</footer>
 
-  function init() {
-    const userId = localStorage.getItem('userId');
-    if (userId) {
-      document.getElementById('landing').style.display = 'block';
-    } else {
-      document.getElementById('onboarding').style.display = 'block';
-    }
-  }
-
-  function nextStep(current) {
-    document.getElementById(`step-${current}`).style.display = 'none';
-    document.getElementById(`dot-${current}`).classList.replace('active','done');
-    const next = current + 1;
-    document.getElementById(`step-${next}`).style.display = 'block';
-    document.getElementById(`dot-${next}`).classList.add('active');
-  }
-
-  function prevStep(current) {
-    document.getElementById(`step-${current}`).style.display = 'none';
-    const prev = current - 1;
-    document.getElementById(`step-${prev}`).style.display = 'block';
-    document.getElementById(`dot-${current}`).classList.remove('active');
-    document.getElementById(`dot-${prev}`).classList.replace('done','active');
-  }
-
-  function addTag(e, type) {
-    if (e.key !== 'Enter') return;
-    e.preventDefault();
-    const input = document.getElementById(`${type === 'skills' ? 'skills' : 'roles'}-input`);
-    const val = input.value.trim();
-    if (!val) return;
-    const arr = type === 'skills' ? skills : roles;
-    if (arr.includes(val)) return;
-    arr.push(val);
-    const container = document.getElementById(`${type === 'skills' ? 'skills' : 'roles'}-tags`);
-    const tag = document.createElement('span');
-    tag.className = 'tag';
-    tag.innerHTML = `${val} <span class="remove" onclick="removeTag(this,'${type}','${val}')">&#10005;</span>`;
-    container.appendChild(tag);
-    input.value = '';
-  }
-
-  function removeTag(el, type, val) {
-    const arr = type === 'skills' ? skills : roles;
-    const i = arr.indexOf(val);
-    if (i > -1) arr.splice(i, 1);
-    el.parentElement.remove();
-  }
-
-  async function saveProfile() {
-    const expRaw = document.getElementById('experience').value.trim();
-    const profile = {
-      name: document.getElementById('name').value.trim(),
-      email: document.getElementById('email').value.trim(),
-      location: document.getElementById('location').value.trim(),
-      degree: document.getElementById('degree').value.trim(),
-      university: document.getElementById('university').value.trim(),
-      graduation_year: document.getElementById('grad-year').value.trim(),
-      skills: [...skills],
-      experience: expRaw ? [{ summary: expRaw }] : [],
-      target_roles: [...roles],
-    };
-
-    if (!profile.name || !profile.email) {
-      alert('Please enter your name and email.');
-      return;
-    }
-
-    const res = await fetch('/api/user/save', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(profile),
-    });
-    const data = await res.json();
-    localStorage.setItem('userId', data.user_id);
-    localStorage.setItem('userName', profile.name);
-    document.getElementById('onboarding').style.display = 'none';
-    document.getElementById('landing').style.display = 'block';
-  }
-
-  function resetProfile() {
-    localStorage.removeItem('userId');
-    localStorage.removeItem('userName');
-    location.reload();
-  }
-
-  init();
-</script>
 </body>
 </html>

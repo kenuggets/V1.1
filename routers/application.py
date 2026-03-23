@@ -1,6 +1,7 @@
 import asyncio
 from fastapi import APIRouter, BackgroundTasks
 from pydantic import BaseModel
+import database
 from database import get_user_by_id, log_application, get_applications
 from bots.application_bot import score_job_fit
 
