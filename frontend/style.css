@@ -411,11 +411,34 @@ tr:hover td { background: rgba(255,255,255,0.015); }
 /* ─── Feature Cards ──────────────────────────────────────────────────────── */
 .feature-card {
   background: var(--navy-card); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 2rem; cursor: pointer;
+  padding: 2rem; cursor: pointer; position: relative;
+  --glow-active: 0; --glow-start: 0;
   transition: transform 0.28s cubic-bezier(0.2,0,0,1), border-color 0.2s, box-shadow 0.28s cubic-bezier(0.2,0,0,1), background 0.2s;
 }
+/* Glowing spotlight border — rotates toward the cursor */
+.feature-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from calc((var(--glow-start) - 35) * 1deg),
+    transparent 0deg,
+    rgba(255,255,255,0.65) 70deg,
+    transparent 140deg
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: var(--glow-active);
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
 .feature-card:hover {
-  border-color: var(--border-strong);
+  border-color: transparent;
   transform: translateY(-6px);
   box-shadow: 0 20px 48px rgba(0,0,0,0.6);
   background: #191919;
