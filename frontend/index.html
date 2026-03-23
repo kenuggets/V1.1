@@ -3,216 +3,234 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Launchpad — Your Career Starts Here</title>
+  <title>Launchpad — Land your first internship</title>
   <link rel="stylesheet" href="/static/style.css" />
+  <style>
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.75rem; font-weight: 500; color: var(--muted);
+      letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2rem;
+    }
+    .hero-eyebrow::before, .hero-eyebrow::after {
+      content: ''; display: inline-block; width: 28px; height: 1px;
+      background: var(--border-strong);
+    }
+    .hero h1 { font-size: clamp(2.8rem, 6vw, 5.2rem); font-weight: 800; line-height: 1.0; letter-spacing: -0.04em; }
+    .hero h1 em { font-style: normal; color: var(--muted); }
+    .hero-stats { display: flex; justify-content: center; gap: 3rem; margin-top: 3.5rem; padding-top: 3.5rem; border-top: 1px solid var(--border); }
+    .hero-stats div { text-align: center; }
+    .hero-stats .n { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; color: var(--white); display: block; }
+    .hero-stats .l { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.04em; }
+
+    /* Alternating feature sections */
+    .feat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; padding: 5rem 0; border-top: 1px solid var(--border); }
+    .feat-row:last-child { border-bottom: 1px solid var(--border); }
+    .feat-tag { font-size: 0.7rem; font-weight: 600; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1rem; }
+    .feat-row h2 { font-size: 1.75rem; margin-bottom: 1rem; }
+    .feat-list { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; margin-top: 1.5rem; }
+    .feat-list li { display: flex; gap: 0.75rem; align-items: flex-start; font-size: 0.875rem; color: var(--muted); }
+    .feat-list li::before { content: '—'; color: var(--border-strong); flex-shrink: 0; }
+
+    /* Preview mock cards */
+    .preview { background: var(--navy-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; }
+    .preview-label { font-size: 0.65rem; font-weight: 600; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.25rem; }
+    .preview-row { display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 0.85rem; border-radius: 4px; background: var(--navy-light); border: 1px solid var(--border); margin-bottom: 0.5rem; }
+
+    /* CTA strip */
+    .cta-strip { text-align: center; padding: 6rem 1.5rem; }
+    .cta-strip h2 { font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -0.03em; margin-bottom: 1rem; }
+
+    @media (max-width: 768px) {
+      .feat-row { grid-template-columns: 1fr; gap: 2.5rem; }
+      .hero-stats { gap: 1.5rem; }
+    }
+  </style>
 </head>
 <body>
 
-<!-- Navbar -->
 <nav class="navbar">
-  <div class="logo">🚀 <span>Launch</span>pad</div>
+  <a href="/" class="logo">Launchpad</a>
   <div style="display:flex;align-items:center;gap:0.75rem">
     <a href="/signup.html" class="btn btn-outline btn-sm">Log in</a>
-    <a href="/signup.html" class="btn btn-primary btn-sm">Get started free</a>
+    <a href="/signup.html" class="btn btn-primary btn-sm">Get started</a>
   </div>
 </nav>
 
 <!-- Hero -->
 <section class="hero">
-  <div style="display:inline-flex;align-items:center;gap:0.4rem;background:var(--indigo-dim);border:1px solid var(--indigo);color:var(--indigo-light);padding:0.3rem 1rem;border-radius:20px;font-size:0.82rem;font-weight:600;margin-bottom:1.5rem">
-    ✦ Built for university students targeting their first internship
-  </div>
-  <h1>Land your first<br><span>internship</span></h1>
-  <p>From "I have no idea what I want" to "I got the offer" — Launchpad guides you through every step of your career journey, step by step.</p>
-  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
-    <a href="/signup.html" class="btn btn-gold btn-lg">Start for free →</a>
+  <div class="hero-eyebrow">For university students targeting their first internship</div>
+  <h1>Land your<br>first <em>internship</em></h1>
+  <p>From "I have no idea what I want" to signed offer — a structured system for every stage of your career journey.</p>
+  <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap">
+    <a href="/signup.html" class="btn btn-primary btn-lg">Start for free</a>
     <a href="#how" class="btn btn-outline btn-lg">See how it works</a>
   </div>
-  <div style="margin-top:3rem;display:flex;justify-content:center;gap:2.5rem;flex-wrap:wrap">
-    <div style="text-align:center">
-      <div style="font-size:1.6rem;font-weight:800;color:var(--white)">4</div>
-      <div style="font-size:0.8rem;color:var(--muted)">Career Modules</div>
-    </div>
-    <div style="text-align:center">
-      <div style="font-size:1.6rem;font-weight:800;color:var(--white)">1000+</div>
-      <div style="font-size:0.8rem;color:var(--muted)">Personalised plans</div>
-    </div>
-    <div style="text-align:center">
-      <div style="font-size:1.6rem;font-weight:800;color:var(--white)">100%</div>
-      <div style="font-size:0.8rem;color:var(--muted)">Built for Students</div>
-    </div>
+  <div class="hero-stats">
+    <div><span class="n">4</span><span class="l">Career stages</span></div>
+    <div><span class="n">1000+</span><span class="l">Students guided</span></div>
+    <div><span class="n">100%</span><span class="l">Built for students</span></div>
   </div>
 </section>
 
-<!-- Journey Overview -->
+<!-- How it works -->
 <section class="section" id="how">
   <div class="container">
-    <div class="section-header text-center">
-      <h2>Your complete career journey, <span style="color:var(--indigo)">in one place</span></h2>
-      <p>Most students waste their first two years not knowing what to do. Launchpad fixes that.</p>
+    <div style="margin-bottom:3rem">
+      <div style="font-size:0.7rem;font-weight:600;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem">The framework</div>
+      <h2 style="max-width:500px">A complete system for<br>getting hired.</h2>
     </div>
 
-    <div class="grid-4" style="margin-top:2.5rem">
+    <div class="grid-4" style="margin-bottom:2rem">
       <div class="feature-card" onclick="location.href='/signup.html'">
-        <span class="fc-icon">🔭</span>
+        <span class="fc-icon">01</span>
         <h3>Discover</h3>
-        <p>Explore roles, compare careers, simulate a day in the life, and build a personalised roadmap.</p>
-        <div style="margin-top:1.2rem;font-size:0.8rem;color:var(--indigo-light);font-weight:600">Explore roles →</div>
+        <p>Explore roles, compare careers, and build a roadmap built around your degree and ambitions.</p>
+        <div style="margin-top:1.5rem;font-size:0.78rem;color:var(--muted)">Explore roles →</div>
       </div>
       <div class="feature-card" onclick="location.href='/signup.html'">
-        <span class="fc-icon">🛠️</span>
+        <span class="fc-icon">02</span>
         <h3>Build</h3>
-        <p>Craft your CV, LinkedIn, and cover letters. Track applications and send cold outreach that gets replies.</p>
-        <div style="margin-top:1.2rem;font-size:0.8rem;color:var(--indigo-light);font-weight:600">Build profile →</div>
+        <p>Craft a standout CV, send cold outreach that gets replies, and track every application.</p>
+        <div style="margin-top:1.5rem;font-size:0.78rem;color:var(--muted)">Build your profile →</div>
       </div>
       <div class="feature-card" onclick="location.href='/signup.html'">
-        <span class="fc-icon">🎯</span>
+        <span class="fc-icon">03</span>
         <h3>Prepare</h3>
-        <p>Get ready for coffee chats and interviews with tailored coaching, mock sessions, and audio feedback.</p>
-        <div style="margin-top:1.2rem;font-size:0.8rem;color:var(--indigo-light);font-weight:600">Start prep →</div>
+        <p>Tailored coffee chat prep, mock interviews, audio coaching. Walk in ready.</p>
+        <div style="margin-top:1.5rem;font-size:0.78rem;color:var(--muted)">Start preparing →</div>
       </div>
       <div class="feature-card" onclick="location.href='/signup.html'">
-        <span class="fc-icon">🏆</span>
-        <h3>Succeed</h3>
-        <p>Track your progress, earn milestone badges, hit weekly goals, and stay accountable to your ambitions.</p>
-        <div style="margin-top:1.2rem;font-size:0.8rem;color:var(--indigo-light);font-weight:600">Stay on track →</div>
+        <span class="fc-icon">04</span>
+        <h3>Track</h3>
+        <p>Weekly goals, streak tracking, and milestone badges to keep you accountable.</p>
+        <div style="margin-top:1.5rem;font-size:0.78rem;color:var(--muted)">Stay on track →</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Features Detail -->
-<section class="section" style="background:var(--navy-light);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+<!-- Feature details -->
+<section class="section" style="border-top:1px solid var(--border)">
   <div class="container">
-    <div class="grid-2" style="gap:4rem;align-items:center">
+
+    <div class="feat-row">
       <div>
-        <div style="font-size:0.8rem;font-weight:600;color:var(--indigo-light);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem">Discover</div>
-        <h2>Stop guessing. <span style="color:var(--indigo)">Explore with clarity.</span></h2>
-        <p style="margin-top:1rem">Compare Investment Banking vs. Consulting vs. Corporate Finance side by side. Hear from real professionals. Simulate what a typical day actually feels like — hours, pressure, and all.</p>
-        <ul style="margin-top:1.5rem;display:flex;flex-direction:column;gap:0.75rem;list-style:none">
-          <li style="display:flex;gap:0.75rem;align-items:flex-start"><span style="color:var(--green);font-size:1.1rem;flex-shrink:0">✓</span><span style="color:var(--muted);font-size:0.9rem">Role comparison tool (hours, pay, exit opps, culture)</span></li>
-          <li style="display:flex;gap:0.75rem;align-items:flex-start"><span style="color:var(--green);font-size:1.1rem;flex-shrink:0">✓</span><span style="color:var(--muted);font-size:0.9rem">AI job simulation — live a day in the role</span></li>
-          <li style="display:flex;gap:0.75rem;align-items:flex-start"><span style="color:var(--green);font-size:1.1rem;flex-shrink:0">✓</span><span style="color:var(--muted);font-size:0.9rem">Personalised skills gap analysis</span></li>
-          <li style="display:flex;gap:0.75rem;align-items:flex-start"><span style="color:var(--green);font-size:1.1rem;flex-shrink:0">✓</span><span style="color:var(--muted);font-size:0.9rem">Year-by-year roadmap for your degree</span></li>
+        <div class="feat-tag">01 — Discover</div>
+        <h2>Stop guessing.<br>Explore with clarity.</h2>
+        <p>Compare Investment Banking vs. Consulting vs. Corporate Finance side by side. Hear from real professionals. Simulate what a day actually feels like.</p>
+        <ul class="feat-list">
+          <li>Role comparison — hours, pay, exit opps, culture</li>
+          <li>AI job simulation — live a day in the role</li>
+          <li>Personalised skills gap analysis</li>
+          <li>Year-by-year roadmap for your degree</li>
         </ul>
       </div>
-      <div class="card" style="padding:2rem">
-        <div style="font-size:0.78rem;color:var(--muted);margin-bottom:1rem;font-weight:500">ROLE COMPARISON PREVIEW</div>
-        <div style="display:flex;gap:1rem">
-          <div style="flex:1;background:var(--navy-light);border-radius:10px;padding:1rem;border:1px solid var(--indigo)">
-            <div style="font-weight:700;font-size:0.9rem;color:var(--white);margin-bottom:0.75rem">Investment Banking</div>
-            <div style="font-size:0.78rem;color:var(--muted);display:flex;flex-direction:column;gap:0.4rem">
-              <div>⏰ 70–90 hrs/week</div>
-              <div>💰 £55–65k base</div>
-              <div>📈 PE, VC, Corp Dev</div>
-              <div>😰 Demanding culture</div>
+      <div class="preview">
+        <div class="preview-label">Role comparison</div>
+        <div style="display:flex;gap:0.75rem">
+          <div style="flex:1;background:var(--navy-light);border-radius:4px;padding:1rem;border:1px solid var(--border-strong)">
+            <div style="font-weight:700;font-size:0.85rem;color:var(--white);margin-bottom:0.75rem">Inv. Banking</div>
+            <div style="font-size:0.75rem;color:var(--muted);display:flex;flex-direction:column;gap:0.35rem">
+              <div>70–90 hrs / week</div>
+              <div>£55–65k base</div>
+              <div>PE, VC exits</div>
+              <div>Demanding culture</div>
             </div>
           </div>
-          <div style="flex:1;background:var(--navy-light);border-radius:10px;padding:1rem;border:1px solid var(--border)">
-            <div style="font-weight:700;font-size:0.9rem;color:var(--white);margin-bottom:0.75rem">Consulting</div>
-            <div style="font-size:0.78rem;color:var(--muted);display:flex;flex-direction:column;gap:0.4rem">
-              <div>⏰ 55–70 hrs/week</div>
-              <div>💰 £45–55k base</div>
-              <div>📈 Industry, PE, Ops</div>
-              <div>✈️ Travel-heavy</div>
+          <div style="flex:1;background:var(--navy-light);border-radius:4px;padding:1rem;border:1px solid var(--border)">
+            <div style="font-weight:700;font-size:0.85rem;color:var(--white);margin-bottom:0.75rem">Consulting</div>
+            <div style="font-size:0.75rem;color:var(--muted);display:flex;flex-direction:column;gap:0.35rem">
+              <div>55–70 hrs / week</div>
+              <div>£45–55k base</div>
+              <div>Industry, Ops exits</div>
+              <div>Travel-heavy</div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
 
-<section class="section">
-  <div class="container">
-    <div class="grid-2" style="gap:4rem;align-items:center">
-      <div class="card" style="padding:2rem">
-        <div style="font-size:0.78rem;color:var(--muted);margin-bottom:1rem;font-weight:500">OUTREACH TRACKER</div>
-        <div style="display:flex;flex-direction:column;gap:0.6rem">
-          <div style="display:flex;justify-content:space-between;align-items:center;background:var(--navy-light);padding:0.7rem 0.9rem;border-radius:8px;border:1px solid var(--border)">
-            <div><div style="font-size:0.85rem;font-weight:600;color:var(--white)">Sarah Chen</div><div style="font-size:0.75rem;color:var(--muted)">Goldman Sachs · MD</div></div>
-            <span class="pill pill-green">Replied ✓</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;background:var(--navy-light);padding:0.7rem 0.9rem;border-radius:8px;border:1px solid var(--border)">
-            <div><div style="font-size:0.85rem;font-weight:600;color:var(--white)">James Liu</div><div style="font-size:0.75rem;color:var(--muted)">McKinsey · Associate</div></div>
-            <span class="pill pill-gold">Follow up in 3d</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;background:var(--navy-light);padding:0.7rem 0.9rem;border-radius:8px;border:1px solid var(--border)">
-            <div><div style="font-size:0.85rem;font-weight:600;color:var(--white)">Priya Patel</div><div style="font-size:0.75rem;color:var(--muted)">Barclays · Analyst</div></div>
-            <span class="pill pill-muted">Sent today</span>
-          </div>
+    <div class="feat-row">
+      <div class="preview">
+        <div class="preview-label">Outreach tracker</div>
+        <div class="preview-row">
+          <div><div style="font-size:0.85rem;font-weight:600;color:var(--white)">Sarah Chen</div><div style="font-size:0.72rem;color:var(--muted)">Goldman Sachs · MD</div></div>
+          <span class="pill pill-green">Replied</span>
+        </div>
+        <div class="preview-row">
+          <div><div style="font-size:0.85rem;font-weight:600;color:var(--white)">James Liu</div><div style="font-size:0.72rem;color:var(--muted)">McKinsey · Associate</div></div>
+          <span class="pill pill-gold">Follow up 3d</span>
+        </div>
+        <div class="preview-row" style="margin-bottom:0">
+          <div><div style="font-size:0.85rem;font-weight:600;color:var(--white)">Priya Patel</div><div style="font-size:0.72rem;color:var(--muted)">Barclays · Analyst</div></div>
+          <span class="pill pill-muted">Sent today</span>
         </div>
       </div>
       <div>
-        <div style="font-size:0.8rem;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem">Build</div>
-        <h2>Your CV, outreach, and applications — <span style="color:var(--gold)">all tracked.</span></h2>
-        <p style="margin-top:1rem">Stop losing track of who you've messaged, when to follow up, and which applications are pending. Build your profile with AI-optimised CVs and cold emails that actually work.</p>
-        <ul style="margin-top:1.5rem;display:flex;flex-direction:column;gap:0.75rem;list-style:none">
-          <li style="display:flex;gap:0.75rem;align-items:flex-start"><span style="color:var(--gold);font-size:1.1rem;flex-shrink:0">✓</span><span style="color:var(--muted);font-size:0.9rem">Industry-specific CV templates + AI bullet feedback</span></li>
-          <li style="display:flex;gap:0.75rem;align-items:flex-start"><span style="color:var(--gold);font-size:1.1rem;flex-shrink:0">✓</span><span style="color:var(--muted);font-size:0.9rem">Cold email templates by scenario with live AI coaching</span></li>
-          <li style="display:flex;gap:0.75rem;align-items:flex-start"><span style="color:var(--gold);font-size:1.1rem;flex-shrink:0">✓</span><span style="color:var(--muted);font-size:0.9rem">Outreach tracker (replies, warmth, follow-up dates)</span></li>
-          <li style="display:flex;gap:0.75rem;align-items:flex-start"><span style="color:var(--gold);font-size:1.1rem;flex-shrink:0">✓</span><span style="color:var(--muted);font-size:0.9rem">Auto-apply to LinkedIn, Indeed, Handshake</span></li>
+        <div class="feat-tag">02 — Build</div>
+        <h2>Your CV, outreach,<br>and applications.</h2>
+        <p>Stop losing track of who you've messaged, when to follow up, and which applications are pending.</p>
+        <ul class="feat-list">
+          <li>Industry-specific CV templates with AI bullet feedback</li>
+          <li>Cold email templates by scenario</li>
+          <li>Outreach tracker — replies, warmth, follow-up dates</li>
+          <li>Auto-apply to LinkedIn, Indeed, Handshake</li>
         </ul>
       </div>
     </div>
-  </div>
-</section>
 
-<section class="section" style="background:var(--navy-light);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
-  <div class="container">
-    <div class="grid-2" style="gap:4rem;align-items:center">
+    <div class="feat-row">
       <div>
-        <div style="font-size:0.8rem;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem">Prepare</div>
-        <h2>Walk into every coffee chat <span style="color:var(--green)">prepared.</span></h2>
-        <p style="margin-top:1rem">Paste your interviewer's LinkedIn profile and get a tailored guide: what to ask, what not to say, how to end well, and how to turn one chat into a referral.</p>
-        <ul style="margin-top:1.5rem;display:flex;flex-direction:column;gap:0.75rem;list-style:none">
-          <li style="display:flex;gap:0.75rem;align-items:flex-start"><span style="color:var(--green);font-size:1.1rem;flex-shrink:0">✓</span><span style="color:var(--muted);font-size:0.9rem">Tailored coffee chat prep from interviewer's bio</span></li>
-          <li style="display:flex;gap:0.75rem;align-items:flex-start"><span style="color:var(--green);font-size:1.1rem;flex-shrink:0">✓</span><span style="color:var(--muted);font-size:0.9rem">Mock interviews: behavioural, case, technical, AC</span></li>
-          <li style="display:flex;gap:0.75rem;align-items:flex-start"><span style="color:var(--green);font-size:1.1rem;flex-shrink:0">✓</span><span style="color:var(--muted);font-size:0.9rem">Audio recording + AI tone & confidence coaching</span></li>
-          <li style="display:flex;gap:0.75rem;align-items:flex-start"><span style="color:var(--green);font-size:1.1rem;flex-shrink:0">✓</span><span style="color:var(--muted);font-size:0.9rem">Follow-up strategy so you never lose momentum</span></li>
+        <div class="feat-tag">03 — Prepare</div>
+        <h2>Walk into every<br>conversation ready.</h2>
+        <p>Paste your interviewer's LinkedIn and get a tailored guide: what to ask, what to avoid, how to end, how to turn one chat into a referral.</p>
+        <ul class="feat-list">
+          <li>Tailored coffee chat prep from interviewer's bio</li>
+          <li>Mock interviews — behavioural, case, technical, AC</li>
+          <li>Audio recording with AI tone and confidence coaching</li>
+          <li>Follow-up strategy so you never lose momentum</li>
         </ul>
       </div>
-      <div class="card" style="padding:2rem">
-        <div style="font-size:0.78rem;color:var(--muted);margin-bottom:1rem;font-weight:500">INTERVIEW SCORE PREVIEW</div>
-        <div style="display:flex;flex-direction:column;gap:0.85rem">
+      <div class="preview">
+        <div class="preview-label">Interview scores</div>
+        <div style="display:flex;flex-direction:column;gap:0.9rem">
           <div>
-            <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-bottom:0.4rem"><span style="color:var(--muted)">Content</span><span style="color:var(--white);font-weight:600">4/5</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:0.5rem"><span style="color:var(--muted)">Content</span><span style="color:var(--white);font-weight:600">4 / 5</span></div>
             <div class="progress-wrap"><div class="progress-fill" style="width:80%"></div></div>
           </div>
           <div>
-            <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-bottom:0.4rem"><span style="color:var(--muted)">Structure</span><span style="color:var(--white);font-weight:600">3/5</span></div>
-            <div class="progress-wrap"><div class="progress-fill" style="width:60%;background:linear-gradient(90deg,var(--gold),var(--gold-light))"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:0.5rem"><span style="color:var(--muted)">Structure</span><span style="color:var(--white);font-weight:600">3 / 5</span></div>
+            <div class="progress-wrap"><div class="progress-fill" style="width:60%;background:var(--gold)"></div></div>
           </div>
           <div>
-            <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-bottom:0.4rem"><span style="color:var(--muted)">Conciseness</span><span style="color:var(--white);font-weight:600">5/5</span></div>
-            <div class="progress-wrap"><div class="progress-fill" style="width:100%;background:linear-gradient(90deg,var(--green),#34d399)"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:0.5rem"><span style="color:var(--muted)">Conciseness</span><span style="color:var(--white);font-weight:600">5 / 5</span></div>
+            <div class="progress-wrap"><div class="progress-fill" style="width:100%;background:var(--green)"></div></div>
           </div>
         </div>
-        <div style="margin-top:1.25rem;background:var(--navy-light);border-radius:8px;padding:0.85rem;border:1px solid var(--border);font-size:0.82rem;color:var(--muted)">
-          💬 "Strong answer with good quantification. Work on framing the challenge before diving into your action — give the interviewer more context upfront."
+        <div style="margin-top:1.25rem;background:var(--navy-light);border-radius:4px;padding:0.9rem;border:1px solid var(--border);font-size:0.8rem;color:var(--muted);line-height:1.6">
+          "Strong answer with good quantification. Frame the challenge before diving into action — give the interviewer more context upfront."
         </div>
       </div>
     </div>
+
   </div>
 </section>
 
 <!-- CTA -->
-<section class="section">
+<div class="cta-strip">
   <div class="container">
-    <div style="text-align:center;max-width:600px;margin:0 auto;padding:4rem 2rem;background:var(--navy-card);border-radius:24px;border:1px solid var(--border);position:relative;overflow:hidden">
-      <div style="position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:400px;height:400px;background:radial-gradient(circle,rgba(99,102,241,0.15) 0%,transparent 70%);pointer-events:none"></div>
-      <div style="font-size:2.5rem;margin-bottom:0.75rem">🚀</div>
-      <h2>Your internship journey<br>starts today.</h2>
-      <p style="margin:1rem 0 2rem">Sign up free, tell us about yourself, and we'll build a personalised career plan in minutes.</p>
-      <a href="/signup.html" class="btn btn-gold btn-lg">Get started free →</a>
-      <div style="margin-top:1.5rem;font-size:0.8rem;color:var(--muted)">Free to use · No credit card required</div>
+    <div style="max-width:560px;margin:0 auto">
+      <h2>Your internship<br>starts here.</h2>
+      <p style="margin:1rem 0 2rem;font-size:1rem">Sign up free, complete your profile, and get a personalised career plan in minutes.</p>
+      <a href="/signup.html" class="btn btn-primary btn-lg">Get started — it's free</a>
+      <div style="margin-top:1.25rem;font-size:0.75rem;color:var(--muted)">No credit card required</div>
     </div>
   </div>
-</section>
+</div>
 
-<footer style="border-top:1px solid var(--border);padding:2rem 1.5rem;text-align:center">
-  <div style="font-size:1.1rem;font-weight:800;margin-bottom:0.5rem">🚀 <span style="color:var(--indigo)">Launch</span>pad</div>
-  <div style="font-size:0.82rem;color:var(--muted)">Helping university students land their first internship with AI.</div>
+<footer style="border-top:1px solid var(--border);padding:2rem 1.5rem;display:flex;justify-content:space-between;align-items:center">
+  <div style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;letter-spacing:-0.02em">Launchpad</div>
+  <div style="font-size:0.78rem;color:var(--muted)">Helping university students land their first internship.</div>
 </footer>
 
 </body>

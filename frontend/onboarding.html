@@ -8,7 +8,7 @@
 </head>
 <body>
 <nav class="navbar">
-  <a href="/" class="logo">🚀 <span>Launch</span>pad</a>
+  <a href="/" class="logo">Launchpad</a>
   <div style="font-size:0.85rem;color:var(--muted)">Setting up your profile</div>
 </nav>
 
@@ -155,7 +155,7 @@
       </div>
       <div style="margin-top:1.5rem;display:flex;justify-content:space-between">
         <button class="btn btn-outline" onclick="prevStep()">← Back</button>
-        <button class="btn btn-gold" onclick="saveProfile()">Complete setup 🚀</button>
+        <button class="btn btn-gold" onclick="saveProfile()">Complete setup →</button>
       </div>
     </div>
 
@@ -255,7 +255,7 @@ async function saveProfile() {
     location.href = '/tour.html';
   } catch(e) {
     showToast('Error saving profile. Please try again.', 'error');
-    btn.textContent = 'Complete setup 🚀'; btn.disabled = false;
+    btn.textContent = 'Complete setup →'; btn.disabled = false;
   }
 }
 

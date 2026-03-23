@@ -7,17 +7,17 @@
   <link rel="stylesheet" href="/static/style.css" />
   <style>
     .tour-card { max-width: 600px; margin: 0 auto; text-align: center; padding: 3rem 2rem; }
-    .tour-icon { font-size: 4rem; margin-bottom: 1.5rem; display: block; }
+    .tour-icon { font-size: 2.5rem; margin-bottom: 1.5rem; display: block; opacity: 0.6; }
     .tour-dots { display: flex; gap: 0.5rem; justify-content: center; margin: 2rem 0; }
-    .tour-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: all 0.3s; }
-    .tour-dot.active { background: var(--indigo); width: 24px; border-radius: 4px; }
+    .tour-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border-strong); transition: all 0.3s; }
+    .tour-dot.active { background: var(--white); width: 20px; border-radius: 3px; }
     .tour-slide { display: none; }
     .tour-slide.active { display: block; }
   </style>
 </head>
 <body>
 <nav class="navbar">
-  <a href="/" class="logo">🚀 <span>Launch</span>pad</a>
+  <a href="/" class="logo">Launchpad</a>
   <button class="btn btn-outline btn-sm" onclick="goToDashboard()">Skip tour →</button>
 </nav>
 
@@ -26,25 +26,25 @@
 
     <div class="tour-slide active" id="slide-0">
       <span class="tour-icon">🎉</span>
-      <h2>Welcome to Launchpad, <span id="welcome-name" style="color:var(--indigo)">there</span>!</h2>
+      <h2>Welcome to Launchpad, <span id="welcome-name">there</span>.</h2>
       <p style="margin-top:1rem;font-size:1rem">You've taken the first step. Let us show you how Launchpad is going to help you land your first internship.</p>
     </div>
 
     <div class="tour-slide" id="slide-1">
       <span class="tour-icon">🔭</span>
-      <h2 style="color:var(--indigo)">Discover</h2>
+      <h2>Discover</h2>
       <p style="margin-top:1rem;font-size:1rem">Not sure what you want? Explore careers, compare roles side by side, simulate a day in the life, and get a personalised year-by-year roadmap for your degree. Start here if you're still exploring.</p>
     </div>
 
     <div class="tour-slide" id="slide-2">
       <span class="tour-icon">🛠️</span>
-      <h2 style="color:var(--gold)">Build</h2>
+      <h2>Build</h2>
       <p style="margin-top:1rem;font-size:1rem">Know what you want? Now build towards it. Get your CV, LinkedIn, and cover letters polished. Track every application and cold email. Auto-apply to relevant roles. Stay accountable with weekly goals.</p>
     </div>
 
     <div class="tour-slide" id="slide-3">
       <span class="tour-icon">🎯</span>
-      <h2 style="color:var(--green)">Prepare</h2>
+      <h2>Prepare</h2>
       <p style="margin-top:1rem;font-size:1rem">Got a coffee chat or interview? Prepare with tailored advice based on your interviewer's background. Practice with AI mock interviews. Record your answers and get tone and confidence coaching.</p>
     </div>
 
@@ -92,7 +92,7 @@ function showSlide(n) {
   renderDots();
   document.getElementById('btn-back').style.display = n > 0 ? 'inline-flex' : 'none';
   const btn = document.getElementById('btn-next');
-  if (n === TOTAL - 1) { btn.textContent = 'Go to Dashboard 🚀'; btn.className = 'btn btn-gold btn-lg'; }
+  if (n === TOTAL - 1) { btn.textContent = 'Go to Dashboard →'; btn.className = 'btn btn-primary btn-lg'; }
   else { btn.textContent = 'Next →'; btn.className = 'btn btn-primary btn-lg'; }
 }
 
