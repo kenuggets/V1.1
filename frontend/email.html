@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cold Email — CareerAI</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+<header class="page-header">
+  <a class="logo" href="/">&#127775; CareerAI</a>
+  <nav>
+    <a href="/cv.html">CV &amp; Cover Letter</a>
+    <a href="/application.html">Apply</a>
+    <a href="/email.html" class="active">Cold Email</a>
+    <a href="/interview.html">Interview Prep</a>
+  </nav>
+</header>
+
+<div class="chat-layout">
+  <div class="chat-messages" id="messages">
+    <div class="message assistant">
+      <div class="avatar">&#9993;&#65039;</div>
+      <div class="bubble">
+        I'll help you write a cold email that actually gets a reply.<br><br>
+        Let's start: <strong>who are you emailing and at which company?</strong> If you know the person's name and role, include that too — the more specific, the better the email.
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-input-area">
+    <textarea id="input" placeholder="Type your message..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+    <button class="btn btn-primary" onclick="send()">Send</button>
+  </div>
+</div>
+
+<script>
+  const userId = localStorage.getItem('userId');
+  const history = [];
+
+  function autoResize(el) {
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 160) + 'px';
+  }
+
+  function handleKey(e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+  }
+
+  function addMessage(role, text) {
+    const wrap = document.getElementById('messages');
+    const div = document.createElement('div');
+    div.className = `message ${role}`;
+    const icon = role === 'user' ? '&#128100;' : '&#9993;&#65039;';
+    div.innerHTML = `<div class="avatar">${icon}</div><div class="bubble">${text.replace(/\n/g,'<br>')}</div>`;
+    wrap.appendChild(div);
+    wrap.scrollTop = wrap.scrollHeight;
+    return div;
+  }
+
+  async function send() {
+    const input = document.getElementById('input');
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    input.style.height = 'auto';
+
+    addMessage('user', text);
+    history.push({ role: 'user', content: text });
+
+    const thinking = addMessage('assistant', '<span class="thinking">Crafting your email...</span>');
+
+    const res = await fetch('/api/email/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: history, user_id: userId ? parseInt(userId) : null }),
+    });
+    const data = await res.json();
+    const reply = data.reply || 'Sorry, something went wrong.';
+
+    thinking.querySelector('.bubble').innerHTML = reply.replace(/\n/g,'<br>');
+    history.push({ role: 'assistant', content: reply });
+    document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Career Assistant</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+<header class="page-header">
+  <span class="logo">&#127775; CareerAI</span>
+  <nav>
+    <a href="/cv.html">CV &amp; Cover Letter</a>
+    <a href="/application.html">Apply</a>
+    <a href="/email.html">Cold Email</a>
+    <a href="/interview.html">Interview Prep</a>
+  </nav>
+</header>
+
+<!-- Onboarding (shown until profile saved) -->
+<div id="onboarding" class="onboarding-wrap" style="display:none">
+  <h2>Welcome to CareerAI</h2>
+  <p class="sub">Set up your profile once — every bot uses it to personalise advice for you.</p>
+
+  <div class="step-indicator">
+    <div class="step-dot active" id="dot-0"></div>
+    <div class="step-dot" id="dot-1"></div>
+    <div class="step-dot" id="dot-2"></div>
+  </div>
+
+  <!-- Step 0 -->
+  <div id="step-0">
+    <div class="form-group">
+      <label>Full Name</label>
+      <input type="text" id="name" placeholder="Jane Smith" />
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="email" placeholder="jane@university.ac.uk" />
+    </div>
+    <div class="form-group">
+      <label>Location (City, Country)</label>
+      <input type="text" id="location" placeholder="London, UK" />
+    </div>
+    <button class="btn btn-primary" onclick="nextStep(0)">Next &rarr;</button>
+  </div>
+
+  <!-- Step 1 -->
+  <div id="step-1" style="display:none">
+    <div class="form-group">
+      <label>Degree</label>
+      <input type="text" id="degree" placeholder="BSc Computer Science" />
+    </div>
+    <div class="form-group">
+      <label>University</label>
+      <input type="text" id="university" placeholder="University College London" />
+    </div>
+    <div class="form-group">
+      <label>Graduation Year</label>
+      <input type="text" id="grad-year" placeholder="2026" />
+    </div>
+    <div class="form-group">
+      <label>Skills (press Enter to add)</label>
+      <div class="tag-input" id="skills-tags"></div>
+      <input type="text" id="skills-input" placeholder="Python, Excel, Leadership..." onkeydown="addTag(event,'skills')" style="margin-top:0.5rem" />
+    </div>
+    <div style="display:flex;gap:0.5rem">
+      <button class="btn btn-secondary" onclick="prevStep(1)">&larr; Back</button>
+      <button class="btn btn-primary" onclick="nextStep(1)">Next &rarr;</button>
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div id="step-2" style="display:none">
+    <div class="form-group">
+      <label>Target Roles (press Enter to add)</label>
+      <div class="tag-input" id="roles-tags"></div>
+      <input type="text" id="roles-input" placeholder="Investment Banking Analyst, Software Engineer..." onkeydown="addTag(event,'roles')" style="margin-top:0.5rem" />
+    </div>
+    <div class="form-group">
+      <label>Experience (brief summary)</label>
+      <textarea id="experience" placeholder="Treasurer of Finance Society (2023-24); Data Analysis intern at Acme Corp (Summer 2024)..."></textarea>
+    </div>
+    <div style="display:flex;gap:0.5rem">
+      <button class="btn btn-secondary" onclick="prevStep(2)">&larr; Back</button>
+      <button class="btn btn-primary" onclick="saveProfile()">Save &amp; Get Started</button>
+    </div>
+  </div>
+</div>
+
+<!-- Landing (shown after profile saved) -->
+<div id="landing" style="display:none">
+  <div class="hero">
+    <h1>Your AI <span>Career Assistant</span></h1>
+    <p>Four specialised bots to help you build your CV, apply to internships, write cold emails, and ace your interviews.</p>
+  </div>
+
+  <div class="bot-grid">
+    <a href="/cv.html" class="bot-card">
+      <div class="icon">&#128196;</div>
+      <h3>CV &amp; Cover Letter</h3>
+      <p>Get tailored advice and a personalised cover letter for any role.</p>
+    </a>
+    <a href="/application.html" class="bot-card">
+      <div class="icon">&#128640;</div>
+      <h3>Auto Apply</h3>
+      <p>Search LinkedIn, Indeed, Handshake and apply — all in one click.</p>
+    </a>
+    <a href="/email.html" class="bot-card">
+      <div class="icon">&#9993;&#65039;</div>
+      <h3>Cold Email</h3>
+      <p>Write compelling outreach emails that actually get replies.</p>
+    </a>
+    <a href="/interview.html" class="bot-card">
+      <div class="icon">&#127908;</div>
+      <h3>Interview Prep</h3>
+      <p>Practice with role-specific questions and get scored on every answer.</p>
+    </a>
+  </div>
+
+  <div style="text-align:center;padding-bottom:2rem">
+    <button class="btn btn-secondary btn-sm" onclick="resetProfile()">&#9998; Edit profile</button>
+  </div>
+</div>
+
+<script>
+  const skills = [], roles = [];
+
+  function init() {
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+      document.getElementById('landing').style.display = 'block';
+    } else {
+      document.getElementById('onboarding').style.display = 'block';
+    }
+  }
+
+  function nextStep(current) {
+    document.getElementById(`step-${current}`).style.display = 'none';
+    document.getElementById(`dot-${current}`).classList.replace('active','done');
+    const next = current + 1;
+    document.getElementById(`step-${next}`).style.display = 'block';
+    document.getElementById(`dot-${next}`).classList.add('active');
+  }
+
+  function prevStep(current) {
+    document.getElementById(`step-${current}`).style.display = 'none';
+    const prev = current - 1;
+    document.getElementById(`step-${prev}`).style.display = 'block';
+    document.getElementById(`dot-${current}`).classList.remove('active');
+    document.getElementById(`dot-${prev}`).classList.replace('done','active');
+  }
+
+  function addTag(e, type) {
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    const input = document.getElementById(`${type === 'skills' ? 'skills' : 'roles'}-input`);
+    const val = input.value.trim();
+    if (!val) return;
+    const arr = type === 'skills' ? skills : roles;
+    if (arr.includes(val)) return;
+    arr.push(val);
+    const container = document.getElementById(`${type === 'skills' ? 'skills' : 'roles'}-tags`);
+    const tag = document.createElement('span');
+    tag.className = 'tag';
+    tag.innerHTML = `${val} <span class="remove" onclick="removeTag(this,'${type}','${val}')">&#10005;</span>`;
+    container.appendChild(tag);
+    input.value = '';
+  }
+
+  function removeTag(el, type, val) {
+    const arr = type === 'skills' ? skills : roles;
+    const i = arr.indexOf(val);
+    if (i > -1) arr.splice(i, 1);
+    el.parentElement.remove();
+  }
+
+  async function saveProfile() {
+    const expRaw = document.getElementById('experience').value.trim();
+    const profile = {
+      name: document.getElementById('name').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      location: document.getElementById('location').value.trim(),
+      degree: document.getElementById('degree').value.trim(),
+      university: document.getElementById('university').value.trim(),
+      graduation_year: document.getElementById('grad-year').value.trim(),
+      skills: [...skills],
+      experience: expRaw ? [{ summary: expRaw }] : [],
+      target_roles: [...roles],
+    };
+
+    if (!profile.name || !profile.email) {
+      alert('Please enter your name and email.');
+      return;
+    }
+
+    const res = await fetch('/api/user/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(profile),
+    });
+    const data = await res.json();
+    localStorage.setItem('userId', data.user_id);
+    localStorage.setItem('userName', profile.name);
+    document.getElementById('onboarding').style.display = 'none';
+    document.getElementById('landing').style.display = 'block';
+  }
+
+  function resetProfile() {
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userName');
+    location.reload();
+  }
+
+  init();
+</script>
+</body>
+</html>

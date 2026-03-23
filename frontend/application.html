@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Auto Apply — CareerAI</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <style>
+    .app-layout { max-width: 760px; margin: 0 auto; padding: 2rem 1.5rem; }
+    .app-layout h2 { margin-bottom: 0.4rem; }
+    .app-layout .sub { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    .search-card { margin-bottom: 1.5rem; }
+    .listings-wrap { display: flex; flex-direction: column; gap: 0.75rem; }
+    .history-section { margin-top: 2rem; }
+    .history-section h3 { margin-bottom: 0.75rem; }
+    .platform-badge {
+      font-size: 0.75rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 20px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      text-transform: capitalize;
+    }
+  </style>
+</head>
+<body>
+
+<header class="page-header">
+  <a class="logo" href="/">&#127775; CareerAI</a>
+  <nav>
+    <a href="/cv.html">CV &amp; Cover Letter</a>
+    <a href="/application.html" class="active">Apply</a>
+    <a href="/email.html">Cold Email</a>
+    <a href="/interview.html">Interview Prep</a>
+  </nav>
+</header>
+
+<div class="app-layout">
+  <h2>&#128640; Auto Apply</h2>
+  <p class="sub">Enter the roles you're interested in. The bot will find matching internships and apply for you — with your confirmation before each submission.</p>
+
+  <!-- Credentials notice -->
+  <div class="card" style="margin-bottom:1.5rem;border-color:rgba(245,200,66,0.4);background:rgba(245,200,66,0.05)">
+    <strong>&#9888;&#65039; Before running:</strong> Make sure your platform credentials are set in the <code>.env</code> file
+    (LinkedIn, Indeed, Handshake). Credentials are stored locally and never transmitted.
+  </div>
+
+  <!-- Search form -->
+  <div class="card search-card">
+    <div class="form-group">
+      <label>Job Titles (press Enter to add)</label>
+      <div class="tag-input" id="title-tags"></div>
+      <input type="text" id="title-input" placeholder="Investment Banking Analyst, Software Engineer Intern..." onkeydown="addTag(event)" style="margin-top:0.5rem" />
+    </div>
+    <div class="form-group">
+      <label>Location</label>
+      <input type="text" id="location" placeholder="London, UK" />
+    </div>
+    <button class="btn btn-primary" id="search-btn" onclick="searchJobs()">&#128269; Find Internships</button>
+  </div>
+
+  <!-- Results -->
+  <div id="results-section" style="display:none">
+    <h3 style="margin-bottom:0.75rem">Matched Internships</h3>
+    <div class="listings-wrap" id="listings"></div>
+  </div>
+
+  <!-- Application history -->
+  <div class="history-section">
+    <h3>Application History</h3>
+    <div class="listings-wrap" id="history-list">
+      <p style="color:var(--text-muted);font-size:0.9rem">No applications yet.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  const userId = localStorage.getItem('userId');
+  const jobTitles = [];
+  let currentSession = null;
+
+  function addTag(e) {
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    const input = document.getElementById('title-input');
+    const val = input.value.trim();
+    if (!val || jobTitles.includes(val)) return;
+    jobTitles.push(val);
+    const container = document.getElementById('title-tags');
+    const tag = document.createElement('span');
+    tag.className = 'tag';
+    tag.innerHTML = `${val} <span class="remove" onclick="removeTag(this,'${val}')">&#10005;</span>`;
+    container.appendChild(tag);
+    input.value = '';
+  }
+
+  function removeTag(el, val) {
+    const i = jobTitles.indexOf(val);
+    if (i > -1) jobTitles.splice(i, 1);
+    el.parentElement.remove();
+  }
+
+  async function searchJobs() {
+    if (!userId) { alert('Please complete your profile on the home page first.'); return; }
+    if (jobTitles.length === 0) { alert('Please add at least one job title.'); return; }
+    const location = document.getElementById('location').value.trim();
+    if (!location) { alert('Please enter a location.'); return; }
+
+    const btn = document.getElementById('search-btn');
+    btn.disabled = true;
+    btn.textContent = 'Searching...';
+
+    const res = await fetch('/api/application/search', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id: parseInt(userId), job_titles: jobTitles, location }),
+    });
+    const data = await res.json();
+
+    btn.disabled = false;
+    btn.textContent = '&#128269; Find Internships';
+
+    if (data.error) { alert(data.error); return; }
+
+    currentSession = data.session_id;
+    renderListings(data.listings);
+  }
+
+  function renderListings(listings) {
+    const section = document.getElementById('results-section');
+    const wrap = document.getElementById('listings');
+    section.style.display = 'block';
+    wrap.innerHTML = '';
+
+    if (!listings.length) {
+      wrap.innerHTML = '<p style="color:var(--text-muted)">No matching internships found. Try different titles or location.</p>';
+      return;
+    }
+
+    listings.forEach((job, i) => {
+      const scoreClass = job.fit_score >= 7 ? 'score-high' : job.fit_score >= 5 ? 'score-mid' : 'score-low';
+      const div = document.createElement('div');
+      div.className = 'job-listing';
+      div.id = `listing-${i}`;
+      div.innerHTML = `
+        <div class="info">
+          <h4>${job.title}</h4>
+          <p>${job.company} &nbsp;<span class="platform-badge">${job.platform}</span></p>
+          <p style="margin-top:0.3rem"><span class="score-badge ${scoreClass}">Fit: ${job.fit_score}/10</span> &nbsp;<span style="color:var(--text-muted);font-size:0.82rem">${job.fit_reason}</span></p>
+        </div>
+        <div class="job-actions">
+          <button class="btn btn-success btn-sm" onclick="confirm(${i}, true)">&#10003; Apply</button>
+          <button class="btn btn-secondary btn-sm" onclick="confirm(${i}, false)">Skip</button>
+        </div>
+      `;
+      wrap.appendChild(div);
+    });
+  }
+
+  async function confirm(index, apply) {
+    const listing = document.getElementById(`listing-${index}`);
+
+    const res = await fetch('/api/application/confirm', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        user_id: parseInt(userId),
+        session_id: currentSession,
+        listing_index: index,
+        confirmed: apply,
+      }),
+    });
+    const data = await res.json();
+
+    const actions = listing.querySelector('.job-actions');
+    if (data.status === 'applied') {
+      actions.innerHTML = '<span class="status-badge status-applied">&#10003; Applied</span>';
+    } else {
+      actions.innerHTML = '<span class="status-badge status-skipped">Skipped</span>';
+    }
+
+    loadHistory();
+  }
+
+  async function loadHistory() {
+    if (!userId) return;
+    const res = await fetch(`/api/application/history/${userId}`);
+    const data = await res.json();
+    const wrap = document.getElementById('history-list');
+
+    if (!data.applications || !data.applications.length) {
+      wrap.innerHTML = '<p style="color:var(--text-muted);font-size:0.9rem">No applications yet.</p>';
+      return;
+    }
+
+    wrap.innerHTML = '';
+    data.applications.forEach(app => {
+      const statusClass = `status-${app.status}`;
+      const div = document.createElement('div');
+      div.className = 'job-listing';
+      div.innerHTML = `
+        <div class="info">
+          <h4>${app.job_title}</h4>
+          <p>${app.company} &nbsp;<span class="platform-badge">${app.platform || ''}</span></p>
+          <p style="font-size:0.8rem;color:var(--text-muted);margin-top:0.2rem">${new Date(app.date_applied).toLocaleDateString()}</p>
+        </div>
+        <span class="status-badge ${statusClass}">${app.status}</span>
+      `;
+      wrap.appendChild(div);
+    });
+  }
+
+  loadHistory();
+</script>
+</body>
+</html>
